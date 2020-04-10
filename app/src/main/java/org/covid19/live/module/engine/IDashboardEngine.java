@@ -4,4 +4,6 @@ public interface IDashboardEngine {
 
     void onStart();
 
+    void getStatewiseData();
+
 }

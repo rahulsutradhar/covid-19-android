@@ -1,9 +1,5 @@
 package org.covid19.live.utilities.eventbus;
 
-/**
- * Created by Rahul Sutradhar on 07/12/18.
- * Email : rahul.sutradhar@mygate.in
- */
 public interface IEventbus {
     /**
      * @see EventbusImpl#register(Object)

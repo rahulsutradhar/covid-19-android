@@ -14,7 +14,7 @@ import java.util.List;
 public class ManagerLifeCycleController {
     private static final String TAG = "LifeCycleController";
     private List<IManager> mManagers = new ArrayList<IManager>();
-    private final IEventbus mEventBus;
+    private IEventbus mEventBus;
 
     public ManagerLifeCycleController() {
         mEventBus = EventbusImpl.getInstance();

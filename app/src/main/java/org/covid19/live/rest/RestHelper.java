@@ -32,7 +32,7 @@ public class RestHelper {
             HttpLoggingInterceptor logger = new HttpLoggingInterceptor();
             logger.setLevel(HttpLoggingInterceptor.Level.BODY);
             okHttpClient = new OkHttpClient.Builder()
-                    .cache(getCache(4))
+
                     .retryOnConnectionFailure(true)
                     .readTimeout(READ_TIMEOUT, TimeUnit.MILLISECONDS)
                     .connectTimeout(CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS)

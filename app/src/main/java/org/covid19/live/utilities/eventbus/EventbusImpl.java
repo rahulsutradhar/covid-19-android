@@ -5,10 +5,6 @@ import org.covid19.live.utilities.threading.IBusinessExecutor;
 import org.greenrobot.eventbus.EventBus;
 
 
-/**
- * Created by Rahul Sutradhar on 07/12/18.
- * Email : rahul.sutradhar@mygate.in
- */
 public class EventbusImpl implements IEventbus {
     private static EventbusImpl sEventBusImpl = new EventbusImpl();
 
