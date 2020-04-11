@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.covid19.live.R;
+import org.covid19.live.common.AppConstant;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.ui.adapter.StateWiseAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
@@ -84,7 +86,12 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
 
     @Override
     public void onCardClick(StateWise stateWise) {
-
+        if (AppConstant.CARD_STATE_WISE == stateWise.getViewType()) {
+            Intent intent = new Intent(this, DistrictActivity.class);
+            intent.putExtra("state_name", stateWise.getState());
+            intent.putExtra("state_code", stateWise.getStateCode());
+            startActivity(intent);
+        }
     }
 
     /**

@@ -3,17 +3,17 @@
     package="org.covid19.live">
 
     <application
-        android:allowBackup="false"
         android:name=".app.AppController"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".module.ui.DistrictActivity"></activity>
         <activity
             android:name=".module.ui.MainActivity"
-            android:theme="@style/AppTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

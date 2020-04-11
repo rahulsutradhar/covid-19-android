@@ -15,6 +15,9 @@ public class DistrictWise implements Serializable {
     @SerializedName("confirmed")
     private String confirmedCount;
 
+    @SerializedName("delta")
+    private Delta delta;
+
     public String getState() {
         return state;
     }
@@ -37,5 +40,13 @@ public class DistrictWise implements Serializable {
 
     public void setConfirmedCount(String confirmedCount) {
         this.confirmedCount = confirmedCount;
+    }
+
+    public Delta getDelta() {
+        return delta;
+    }
+
+    public void setDelta(Delta delta) {
+        this.delta = delta;
     }
 }
