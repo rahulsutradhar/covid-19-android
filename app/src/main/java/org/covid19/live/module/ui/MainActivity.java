@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getStateListDataFailure().observe(this, stateListFailure);
 
         //fetch data
-        fetchStatewiseLatestData();
+       // fetchStatewiseLatestData();
     }
 
     private void setupViewsReference() {

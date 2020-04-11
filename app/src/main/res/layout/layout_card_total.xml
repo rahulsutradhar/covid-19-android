@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <!-- Left top information -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_title"
+        style="@style/AppTheme.PageTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="@string/total_card_title"
+        android:textAllCaps="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left top information -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_subtitle"
+        style="@style/AppTheme.Body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="start"
+        android:text="@string/total_card_subtitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+
+    <!-- Time update from -->
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/last_updated_text"
+        style="@style/Time.Textstyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="@string/last_updated_at"
+        android:textColor="@color/green_ColorLight"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/last_updated_time"
+        style="@style/Time.Textstyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="right"
+        android:textColor="@color/green_Color"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/last_updated_text"
+        tools:text="11 APR, 11:40 IST" />
+
+
+    <!-- Main Count data -->
+
+    <!-- Top left Confirm-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_confirm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/layout_active"
+        app:layout_constraintTop_toBottomOf="@+id/header_subtitle">
+
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/confirm_title"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/confirm_title"
+            android:textAllCaps="true"
+            android:textColor="@color/red_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/confirm_count"
+            style="@style/AppTheme.Body.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:textAllCaps="true"
+            android:textColor="@color/red_color"
+            android:textSize="@dimen/text_size_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/confirm_title"
+            tools:text="7765" />
+
+        <!--Delta -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/confirm_count_delta"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/red_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/confirm_count"
+            app:layout_constraintBottom_toBottomOf="@+id/confirm_count"
+            app:layout_constraintLeft_toRightOf="@+id/confirm_count"
+            tools:text="[+12]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- Top Right Active -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_active"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_confirm"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_subtitle">
+
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/active_title"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/active_title"
+            android:textAllCaps="true"
+            android:textColor="@color/blue_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/active_count"
+            style="@style/AppTheme.Body.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:textAllCaps="true"
+            android:textColor="@color/blue_color"
+            android:textSize="@dimen/text_size_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/active_title"
+            tools:text="7765" />
+
+        <!--Delta -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/active_count_delta"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/blue_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/active_count"
+            app:layout_constraintBottom_toBottomOf="@+id/active_count"
+            app:layout_constraintLeft_toRightOf="@+id/active_count"
+            tools:text="[+12]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Bottom left Recovered-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_recovered"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/layout_deceased"
+        app:layout_constraintTop_toBottomOf="@+id/layout_confirm">
+
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recovered_title"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/recovered_title"
+            android:textAllCaps="true"
+            android:textColor="@color/green_ColorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recovered_count"
+            style="@style/AppTheme.Body.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:textAllCaps="true"
+            android:textColor="@color/green_Color"
+            android:textSize="@dimen/text_size_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recovered_title"
+            tools:text="7765" />
+
+        <!--Delta -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recovered_count_delta"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/green_ColorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/recovered_count"
+            app:layout_constraintBottom_toBottomOf="@+id/recovered_count"
+            app:layout_constraintLeft_toRightOf="@+id/recovered_count"
+            tools:text="[+12]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- Bottom Right Deceased -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_deceased"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toRightOf="@+id/layout_recovered"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_active">
+
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/deceased_title"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/deceased_title"
+            android:textAllCaps="true"
+            android:textColor="@color/grey_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Time update from -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/deceased_count"
+            style="@style/AppTheme.Body.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="left"
+            android:textAllCaps="true"
+            android:textColor="@color/grey_color"
+            android:textSize="@dimen/text_size_24"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/deceased_title"
+            tools:text="7765" />
+
+        <!--Delta -->
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/deceased_count_delta"
+            style="@style/AppTheme.Body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textAllCaps="true"
+            android:textColor="@color/grey_colorLight"
+            android:textSize="@dimen/text_size_12"
+            android:textStyle="bold"
+            app:layout_constraintBaseline_toBaselineOf="@+id/deceased_count"
+            app:layout_constraintBottom_toBottomOf="@+id/deceased_count"
+            app:layout_constraintLeft_toRightOf="@+id/deceased_count"
+            tools:text="[+12]" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
