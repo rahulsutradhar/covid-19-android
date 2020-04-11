@@ -112,7 +112,7 @@ public abstract class BaseRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        adapterCurrentPosition = position - 1;
+        adapterCurrentPosition = position ;
         switch (mViewType) {
             case RECYCLER_VIEW_TYPE_NORMAL:
                 return RECYCLER_ADAPTER_ITEM;

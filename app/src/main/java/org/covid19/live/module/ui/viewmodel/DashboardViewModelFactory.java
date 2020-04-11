@@ -29,6 +29,8 @@ public class DashboardViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(DashboardViewModel.class)) {
             return (T) new DashboardViewModel(eventBus, businessExecutor);
+        } else if (modelClass.isAssignableFrom(DistrictViewModel.class)) {
+            return (T) new DistrictViewModel(eventBus, businessExecutor);
         }
         throw new IllegalArgumentException("Unknown model class " + modelClass);
     }

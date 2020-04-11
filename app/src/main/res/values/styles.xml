@@ -9,10 +9,17 @@
         <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="AppTheme.NoActionbar" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
+    </style>
+
     <style name="AppTheme.Container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/grey95</item>
+        <item name="android:background">@color/cw_eeVeryLightGrey</item>
     </style>
 
     <style name="AppTheme.Button" parent="TextAppearance.AppCompat.Button">
@@ -26,12 +33,44 @@
     </style>
 
     <style name="AppTheme.Body" parent="TextAppearance.AppCompat.Body1">
-
+        <item name="android:fontFamily">@font/font_rubrik_regular</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:color">@color/cw_eeGray</item>
     </style>
 
     <style name="AppTheme.Error.Textstyle" parent="AppTheme.Body">
         <item name="android:fontFamily">@font/bt_font_light</item>
         <item name="android:textSize">@dimen/text_error_message</item>
     </style>
+
+    <style name="AppTheme.Card">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">#fff</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+
+    <style name="AppTheme.PageTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/covidDarkGrey</item>
+        <item name="android:textSize">@dimen/text_headline</item>
+        <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
+    </style>
+
+    <style name="Time.Textstyle" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/font_rubrik_regular</item>
+        <item name="android:color">@color/green_Color</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="AppTheme.Body.Title" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:color">@color/cw_eeGray</item>
+    </style>
+
+
 
 </resources>

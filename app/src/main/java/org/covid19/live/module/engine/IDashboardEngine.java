@@ -6,4 +6,6 @@ public interface IDashboardEngine {
 
     void getStatewiseData();
 
+    void getDistrictData(String stateName, String stateCode);
+
 }

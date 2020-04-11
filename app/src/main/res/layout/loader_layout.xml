@@ -6,14 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:visibility="visible"
+    android:visibility="gone"
     tools:visibility="gone">
 
 
     <ProgressBar
         android:id="@+id/progressbar"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/radius_progress"
+        android:layout_height="@dimen/radius_progress"
         android:indeterminateDrawable="@drawable/progress_indeterminate"
         android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"

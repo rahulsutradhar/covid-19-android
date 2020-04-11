@@ -31,7 +31,7 @@ public class DashboardViewModel extends BaseViewModel {
         businessExecutor.executeInBusinessThread(new Runnable() {
             @Override
             public void run() {
-                ManagerFactory.getStatewiseDataManager().getStatewiseData();
+                ManagerFactory.getDashboardDataManager().getStatewiseData();
             }
         });
     }

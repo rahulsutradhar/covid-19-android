@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,62 +16,81 @@ import android.widget.TextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.covid19.live.R;
-import org.covid19.live.common.AppConstant;
-import org.covid19.live.module.entity.StateWise;
+import org.covid19.live.module.entity.DistrictWise;
+import org.covid19.live.module.ui.adapter.DistrictWiseAdapter;
 import org.covid19.live.module.ui.adapter.StateWiseAdapter;
-import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
+import org.covid19.live.module.ui.viewmodel.DistrictViewModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements StateWiseAdapter.Listener {
+public class DistrictActivity extends AppCompatActivity {
 
-    public static final String TAG = "MainActivity";
+    public static final String TAG = "DistrictActivity";
 
-    private DashboardViewModel viewModel;
+    private String stateName;
+    private String stateCode;
 
-
+    private DistrictViewModel viewModel;
     private RecyclerView recyclerView;
+    private DistrictWiseAdapter adapter;
+    private ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
+
+    private SwipeRefreshLayout swipeRefreshLayout;
     private View loaderLayout;
     private View errorLayout;
     private TextView errorMessageView;
     private Button retryButton;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private FirebaseAnalytics mFirebaseAnalytics;
 
-    private ArrayList<StateWise> stateWiseList = new ArrayList<>();
-    private StateWiseAdapter adapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_district);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if (getIntent().hasExtra("state_name")) {
+            stateName = getIntent().getStringExtra("state_name");
+        }
+        if (getIntent().hasExtra("state_code")) {
+            stateCode = getIntent().getStringExtra("state_code");
+        }
+
+        setTitle(stateName);
         setupViewsReference();
-        setTitle(R.string.dashboard_title);
 
         //Standard lines for architecture components
         DashboardViewModelFactory factory = DashboardViewModelFactory.getInstance();
-        viewModel = new ViewModelProvider(this, factory).get(DashboardViewModel.class);
+        viewModel = new ViewModelProvider(this, factory).get(DistrictViewModel.class);
         getLifecycle().addObserver(viewModel);
 
-        viewModel.getStateListData().observe(this, stateListDataSuccess);
-        viewModel.getStateListDataFailure().observe(this, stateListFailure);
+        viewModel.getDistrictListData().observe(this, districtListSuccess);
+        viewModel.getDistrictListDataFailure().observe(this, districtListFailure);
 
         //setuprecyclerview
         setupRecyclerView();
 
         //fetch data
-        fetchStatewiseLatestData();
+        fetchDistrictData();
 
         logScreenVisit();
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+
     private void setupViewsReference() {
-        recyclerView = findViewById(R.id.list);
+        recyclerView = findViewById(R.id.district_list);
         swipeRefreshLayout = findViewById(R.id.swiperefresh_layout);
         loaderLayout = findViewById(R.id.loader_layout);
         errorLayout = findViewById(R.id.error_layout);
@@ -82,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchStatewiseLatestData();
+                fetchDistrictData();
 
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
@@ -93,64 +111,54 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fetchStatewiseLatestData();
+                fetchDistrictData();
                 logFirebaseClickEvent("retry_button");
             }
         });
     }
 
-    /**
-     * Fetch data
-     */
-    private void fetchStatewiseLatestData() {
-        showLoader();
-        hideErrorLayout();
-        viewModel.fetchStatewiseLatestData();
-    }
-
     private void setupRecyclerView() {
-        adapter = new StateWiseAdapter(stateWiseList, this);
+        adapter = new DistrictWiseAdapter(districtWisesList);
         LinearLayoutManager managerReview = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(managerReview);
     }
 
-    @Override
-    public void onCardClick(StateWise stateWise) {
-        if (AppConstant.CARD_STATE_WISE == stateWise.getViewType()) {
-            logFirebaseClickEvent(stateWise.getState());
-
-            Intent intent = new Intent(this, DistrictActivity.class);
-            intent.putExtra("state_name", stateWise.getState());
-            intent.putExtra("state_code", stateWise.getStateCode());
-            startActivity(intent);
-        }
+    /**
+     * Api Call to fetch district data
+     */
+    private void fetchDistrictData() {
+        showLoader();
+        hideErrorLayout();
+        viewModel.fetchDistrictData(stateName, stateCode);
     }
 
     /**
-     * Observer for Statelist data
+     * Observer
      */
-    private Observer<ArrayList<StateWise>> stateListDataSuccess = new Observer<ArrayList<StateWise>>() {
+    private Observer<ArrayList<DistrictWise>> districtListSuccess = new Observer<ArrayList<DistrictWise>>() {
         @Override
-        public void onChanged(ArrayList<StateWise> stateWises) {
-            hideLoader();
+        public void onChanged(ArrayList<DistrictWise> districtWises) {
             hideErrorLayout();
-            logFirebaseDataLoad("statewise_data",true);
-            stateWiseList.clear();
-            stateWiseList.addAll(stateWises);
+            hideLoader();
+
+            districtWisesList.clear();
+            districtWisesList.addAll(districtWises);
             adapter.notifyDataSetChanged();
+            logFirebaseDataLoad("district_data", true);
 
         }
     };
 
-    private Observer<Error> stateListFailure = new Observer<Error>() {
+    private Observer<Error> districtListFailure = new Observer<Error>() {
         @Override
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
-            logFirebaseDataLoad("statewise_data",false);
+            logFirebaseDataLoad("district_data", false);
         }
     };
+
 
     private void showLoader() {
         loaderLayout.setVisibility(View.VISIBLE);
@@ -168,10 +176,10 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         errorLayout.setVisibility(View.GONE);
     }
 
-    private void logScreenVisit(){
+    private void logScreenVisit() {
         Bundle bundle = new Bundle();
         bundle.putString("screen_name", TAG);
-        bundle.putBoolean("screen_visit",true );
+        bundle.putBoolean("screen_visit", true);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
@@ -189,5 +197,4 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         bundle.putString("on_click_item", clickItem);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
-
 }
