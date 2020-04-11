@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Covid-19 live</string>
+    <string name="dashboard_title">COVID-19 Dashboard</string>
+    <string name="error_message">Something went wrong at our end!</string>
+    <string name="retry_text">RETRY</string>
+
+    <string name="total_card_title">COVID-19 Tracker</string>
+    <string name="total_card_subtitle">Source covid19india.org</string>
+
+    <string name="last_updated_at">Last updated</string>
+
+    <string name="confirm_title">CONFIRMED</string>
+    <string name="active_title">ACTIVE</string>
+    <string name="recovered_title">RECOVERED</string>
+    <string name="deceased_title">DECEASED</string>
+
+    <string name="state_ut_header_title">State/UT Report</string>
+    <string name="state_ut_subheader_title">COMPILED FROM STATE GOVT. NUMBERS KNOW MORE</string>
+    <string name="splash_title">COVID-19 LIVE\nIndia</string>
+
 </resources>

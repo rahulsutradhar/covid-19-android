@@ -1,6 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">@color/covidTeal</color>
+    <color name="colorPrimaryDark">@color/covidTealDark</color>
+    <color name="colorAccent">@color/covidTealLight</color>
+
+
+    <color name="covidTeal">#007b85</color>
+    <color name="covidTealDark">#005a61</color>
+    <color name="covidTealLight">#7fbdc2</color>
+
+    <color name="grey95">#f2f2f2</color>
+    <color name="grey_light_opaque">#ddddde</color>
+    <color name="grey_opaque">#f1f1f1</color>
+    <color name="cw_eeVeryLightGrey">#d8d8d9</color>
+
+    <color name="cw_eeGray">#6d6e71</color>
+    <color name="cw_lightGray">#f4f4f4</color>
+
+    <color name="blue_opaque">#eff7ff</color>
+
+    <color name="background">#F5F6F7</color>
+    <color name="error_background">#E85959</color>
+
+    <color name="covidDarkGrey">#333333</color>
+    <color name="covidSemiDarkGrey">#3c3d41</color>
+    <color name="covidBlack">#000000</color>
+
+    <color name="green_Color">#28a745</color>
+    <color name="green_ColorLight">#7eca8f</color>
+
+
+    <color name="red_color">#ff073a</color>
+    <color name="red_colorLight">#ff6a88</color>
+
+    <color name="blue_color">#007bff</color>
+    <color name="blue_colorLight">#66afff</color>
+
+    <color name="grey_color">#6c757d</color>
+    <color name="grey_colorLight">#a6acb1</color>
 </resources>
