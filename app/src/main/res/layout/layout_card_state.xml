@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppTheme.Card"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
 
     <!-- Left top information -->
     <androidx.appcompat.widget.AppCompatTextView
@@ -72,16 +74,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:drawableEnd="@drawable/ic_arrow_upward_red"
+            android:drawablePadding="3dp"
             android:gravity="left"
             android:includeFontPadding="false"
             android:textAllCaps="true"
             android:textColor="@color/red_colorLight"
             android:textSize="@dimen/text_size_9"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/confirm_count"
             app:layout_constraintBottom_toBottomOf="@+id/confirm_count"
             app:layout_constraintLeft_toRightOf="@+id/confirm_count"
-            tools:text="[+12]" />
+            tools:text="12"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -134,16 +140,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:drawableEnd="@drawable/ic_arrow_upward_blue"
+            android:drawablePadding="3dp"
             android:gravity="left"
             android:includeFontPadding="false"
             android:textAllCaps="true"
             android:textColor="@color/blue_colorLight"
             android:textSize="@dimen/text_size_9"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/active_count"
             app:layout_constraintBottom_toBottomOf="@+id/active_count"
             app:layout_constraintLeft_toRightOf="@+id/active_count"
-            tools:text="[+12]" />
+            tools:text="12"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -195,16 +205,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:drawableEnd="@drawable/ic_arrow_upward_green"
+            android:drawablePadding="3dp"
             android:gravity="left"
             android:includeFontPadding="false"
             android:textAllCaps="true"
             android:textColor="@color/green_ColorLight"
             android:textSize="@dimen/text_size_9"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/recovered_count"
             app:layout_constraintBottom_toBottomOf="@+id/recovered_count"
             app:layout_constraintLeft_toRightOf="@+id/recovered_count"
-            tools:text="[+12]" />
+            tools:text="12"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -257,16 +271,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:drawableEnd="@drawable/ic_arrow_upward_grey"
+            android:drawablePadding="3dp"
             android:gravity="left"
             android:includeFontPadding="false"
             android:textAllCaps="true"
             android:textColor="@color/grey_colorLight"
             android:textSize="@dimen/text_size_9"
             android:textStyle="bold"
+            android:visibility="gone"
             app:layout_constraintBaseline_toBaselineOf="@+id/deceased_count"
             app:layout_constraintBottom_toBottomOf="@+id/deceased_count"
             app:layout_constraintLeft_toRightOf="@+id/deceased_count"
-            tools:text="[+12]" />
+            tools:text="12"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

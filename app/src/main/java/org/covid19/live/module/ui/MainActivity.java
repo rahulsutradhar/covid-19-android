@@ -3,6 +3,7 @@ package org.covid19.live.module.ui;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -13,12 +14,13 @@ import android.widget.TextView;
 
 import org.covid19.live.R;
 import org.covid19.live.module.entity.StateWise;
+import org.covid19.live.module.ui.adapter.StateWiseAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements StateWiseAdapter.Listener {
 
     public static final String TAG = "MainActivity";
 
@@ -31,11 +33,15 @@ public class MainActivity extends AppCompatActivity {
     private TextView errorMessageView;
     private Button retryButton;
 
+    private ArrayList<StateWise> stateWiseList = new ArrayList<>();
+    private StateWiseAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupViewsReference();
         setTitle(R.string.dashboard_title);
 
         //Standard lines for architecture components
@@ -46,12 +52,16 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getStateListData().observe(this, stateListDataSuccess);
         viewModel.getStateListDataFailure().observe(this, stateListFailure);
 
+        //setuprecyclerview
+        setupRecyclerView();
+
         //fetch data
-       // fetchStatewiseLatestData();
+        fetchStatewiseLatestData();
+
     }
 
     private void setupViewsReference() {
-        recyclerView = findViewById(R.id.light);
+        recyclerView = findViewById(R.id.list);
         loaderLayout = findViewById(R.id.loader_layout);
         errorLayout = findViewById(R.id.error_layout);
         errorMessageView = findViewById(R.id.error_message);
@@ -65,6 +75,17 @@ public class MainActivity extends AppCompatActivity {
         viewModel.fetchStatewiseLatestData();
     }
 
+    private void setupRecyclerView() {
+        adapter = new StateWiseAdapter(stateWiseList, this);
+        LinearLayoutManager managerReview = new LinearLayoutManager(this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(managerReview);
+    }
+
+    @Override
+    public void onCardClick(StateWise stateWise) {
+
+    }
 
     /**
      * Observer for Statelist data
@@ -72,7 +93,10 @@ public class MainActivity extends AppCompatActivity {
     private Observer<ArrayList<StateWise>> stateListDataSuccess = new Observer<ArrayList<StateWise>>() {
         @Override
         public void onChanged(ArrayList<StateWise> stateWises) {
-            Log.d(TAG, "*Rahul* State data Success - "+stateWises.size());
+            Log.d(TAG, "*Rahul* State data Success - " + stateWises.size());
+            stateWiseList.clear();
+            stateWiseList.addAll(stateWises);
+            adapter.notifyDataSetChanged();
 
         }
     };

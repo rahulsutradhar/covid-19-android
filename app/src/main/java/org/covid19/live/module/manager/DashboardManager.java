@@ -2,6 +2,7 @@ package org.covid19.live.module.manager;
 
 import android.util.Log;
 
+import org.covid19.live.common.AppConstant;
 import org.covid19.live.common.interfaces.IManager;
 import org.covid19.live.module.engine.DashboardEngine;
 import org.covid19.live.module.engine.IDashboardEngine;
@@ -57,10 +58,15 @@ public class DashboardManager implements IDashboardManager, IManager {
         //modify data
         for (StateWise stateWise : successEvent.getStateWiseList()) {
             if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
-                stateWise.setViewType(1);
-                break;
+                stateWise.setViewType(AppConstant.CARD_TOTAL);
+            } else {
+                stateWise.setViewType(AppConstant.CARD_STATE_WISE);
             }
         }
+
+        StateWise headerST = new StateWise();
+        headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
+        successEvent.getStateWiseList().set(1, headerST);
 
         mEventBus.post(new IManagerStatewiseDataSuccess() {
             @Override

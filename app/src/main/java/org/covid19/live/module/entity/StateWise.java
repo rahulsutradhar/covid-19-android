@@ -28,6 +28,15 @@ public class StateWise implements Serializable {
     @SerializedName("lastupdatedtime")
     private String lastupdatedtime;
 
+    @SerializedName("deltaconfirmed")
+    private String deltaConfirmedCount;
+
+    @SerializedName("deltarecovered")
+    private String deltaRecoveredCount;
+
+    @SerializedName("deltadeaths")
+    private String deltadeathsCount;
+
     private int viewType;
 
     /**
@@ -108,5 +117,29 @@ public class StateWise implements Serializable {
 
     public void setViewType(int viewType) {
         this.viewType = viewType;
+    }
+
+    public String getDeltaConfirmedCount() {
+        return deltaConfirmedCount;
+    }
+
+    public void setDeltaConfirmedCount(String deltaConfirmedCount) {
+        this.deltaConfirmedCount = deltaConfirmedCount;
+    }
+
+    public String getDeltaRecoveredCount() {
+        return deltaRecoveredCount;
+    }
+
+    public void setDeltaRecoveredCount(String deltaRecoveredCount) {
+        this.deltaRecoveredCount = deltaRecoveredCount;
+    }
+
+    public String getDeltadeathsCount() {
+        return deltadeathsCount;
+    }
+
+    public void setDeltadeathsCount(String deltadeathsCount) {
+        this.deltadeathsCount = deltadeathsCount;
     }
 }

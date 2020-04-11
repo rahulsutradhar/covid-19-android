@@ -12,7 +12,7 @@
     <style name="AppTheme.Container">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@color/grey_light_opaque</item>
+        <item name="android:background">@color/cw_eeVeryLightGrey</item>
     </style>
 
     <style name="AppTheme.Button" parent="TextAppearance.AppCompat.Button">
@@ -54,7 +54,7 @@
 
     <style name="Time.Textstyle" parent="TextAppearance.AppCompat.Body1">
         <item name="android:fontFamily">@font/font_rubrik_regular</item>
-        <item name="android:color">@color/myh_btGreen</item>
+        <item name="android:color">@color/green_Color</item>
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
 

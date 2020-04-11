@@ -14,4 +14,7 @@
     <string name="recovered_title">RECOVERED</string>
     <string name="deceased_title">DECEASED</string>
 
+    <string name="state_ut_header_title">State/UT Report</string>
+    <string name="state_ut_subheader_title">COMPILED FROM STATE GOVT. NUMBERS KNOW MORE</string>
+
 </resources>
