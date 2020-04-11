@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
 import org.covid19.live.module.entity.StateWise;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     private TextView errorMessageView;
     private Button retryButton;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ArrayList<StateWise> stateWiseList = new ArrayList<>();
     private StateWiseAdapter adapter;
@@ -44,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         setupViewsReference();
         setTitle(R.string.dashboard_title);
@@ -62,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         //fetch data
         fetchStatewiseLatestData();
 
+        logScreenVisit();
     }
 
     private void setupViewsReference() {
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
             @Override
             public void onClick(View v) {
                 fetchStatewiseLatestData();
+                logFirebaseClickEvent("retry_button");
             }
         });
     }
@@ -110,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     @Override
     public void onCardClick(StateWise stateWise) {
         if (AppConstant.CARD_STATE_WISE == stateWise.getViewType()) {
+            logFirebaseClickEvent(stateWise.getState());
+
             Intent intent = new Intent(this, DistrictActivity.class);
             intent.putExtra("state_name", stateWise.getState());
             intent.putExtra("state_code", stateWise.getStateCode());
@@ -125,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(ArrayList<StateWise> stateWises) {
             hideLoader();
             hideErrorLayout();
-            Log.d(TAG, "*Rahul* State data Success - " + stateWises.size());
+            logFirebaseDataLoad("statewise_data",true);
             stateWiseList.clear();
             stateWiseList.addAll(stateWises);
             adapter.notifyDataSetChanged();
@@ -138,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
-            Log.d(TAG, "*Rahul* State data Failure");
+            logFirebaseDataLoad("statewise_data",false);
         }
     };
 
@@ -156,6 +166,28 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
 
     private void hideErrorLayout() {
         errorLayout.setVisibility(View.GONE);
+    }
+
+    private void logScreenVisit(){
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putBoolean("screen_visit",true );
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseDataLoad(String api_name, boolean success) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("api_name", api_name);
+        bundle.putBoolean("api_load_success", success);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseClickEvent(String clickItem) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("on_click_item", clickItem);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 }

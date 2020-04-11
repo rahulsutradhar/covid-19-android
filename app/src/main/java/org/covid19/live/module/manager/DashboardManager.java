@@ -112,7 +112,7 @@ public class DashboardManager implements IDashboardManager, IManager {
 
     @Subscribe
     public void onDistrictDataEngineSuccess(EngineDistrictDataSuccess successEvent) {
-        Log.d(TAG, "*Rahul* Size Dist - " + successEvent.getDistrictData().size());
+        Log.d(TAG, "onDistrictDataEngineSuccess");
         districtDataList.clear();
         districtDataList.addAll(successEvent.getDistrictData());
 
@@ -142,7 +142,6 @@ public class DashboardManager implements IDashboardManager, IManager {
                 break;
             }
         }
-        Log.d(TAG, "*Rahul* Specific District - " + districtWisesList.size());
 
         mEventBus.post(new IManagerDistrictSuccess() {
             @Override
@@ -155,6 +154,7 @@ public class DashboardManager implements IDashboardManager, IManager {
 
     @Subscribe
     public void onDistrictDataEngineFailure(IEngineDistrictFailure failureEvent) {
+        Log.d(TAG, "onDistrictDataEngineFailure");
         mEventBus.post(new IManagerDistrictFailure() {
             @Override
             public void districtDataFailure() {

@@ -38,13 +38,13 @@ public class DistrictViewModel extends BaseViewModel {
 
     @Subscribe
     public void onDistrictManagerSuccess(IManagerDistrictSuccess successEvent) {
-        Log.d(TAG, "*Rahul* onDistrictManagerSuccess - " + successEvent.getDistrictData().size());
+        Log.d(TAG, "onDistrictManagerSuccess");
         districtListData.postValue(successEvent.getDistrictData());
     }
 
     @Subscribe
     public void onDistrictManagerFailure(IManagerDistrictFailure failureEvent) {
-        Log.d(TAG, " *Rahul* onDistrictManagerFailure");
+        Log.d(TAG, "onDistrictManagerFailure");
         districtListDataFailure.postValue(new Error());
     }
 

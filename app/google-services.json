@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "36955222224",
+    "firebase_url": "https://covid-19-live-india.firebaseio.com",
+    "project_id": "covid-19-live-india",
+    "storage_bucket": "covid-19-live-india.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36955222224:android:e8819f9be7a1a3a4f56ed5",
+        "android_client_info": {
+          "package_name": "org.covid19.live"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36955222224-24bq5rll5a60picf2m7alecfffp1tu57.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAIG-qmUxP6NELhTC2tBaeE6uv5XjEtJ_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36955222224-24bq5rll5a60picf2m7alecfffp1tu57.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

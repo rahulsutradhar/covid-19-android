@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.covid19.live.R;
 import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.ui.adapter.DistrictWiseAdapter;
@@ -40,10 +42,15 @@ public class DistrictActivity extends AppCompatActivity {
     private TextView errorMessageView;
     private Button retryButton;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_district);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -71,6 +78,8 @@ public class DistrictActivity extends AppCompatActivity {
 
         //fetch data
         fetchDistrictData();
+
+        logScreenVisit();
     }
 
     @Override
@@ -103,6 +112,7 @@ public class DistrictActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 fetchDistrictData();
+                logFirebaseClickEvent("retry_button");
             }
         });
     }
@@ -129,14 +139,13 @@ public class DistrictActivity extends AppCompatActivity {
     private Observer<ArrayList<DistrictWise>> districtListSuccess = new Observer<ArrayList<DistrictWise>>() {
         @Override
         public void onChanged(ArrayList<DistrictWise> districtWises) {
-            Log.d(TAG, "*Rahul* District Data Success");
-
             hideErrorLayout();
             hideLoader();
 
             districtWisesList.clear();
             districtWisesList.addAll(districtWises);
             adapter.notifyDataSetChanged();
+            logFirebaseDataLoad("district_data", true);
 
         }
     };
@@ -144,9 +153,9 @@ public class DistrictActivity extends AppCompatActivity {
     private Observer<Error> districtListFailure = new Observer<Error>() {
         @Override
         public void onChanged(Error error) {
-            Log.d(TAG, "*Rahul* District Data Failure");
             hideLoader();
             showErrorLayout();
+            logFirebaseDataLoad("district_data", false);
         }
     };
 
@@ -167,5 +176,25 @@ public class DistrictActivity extends AppCompatActivity {
         errorLayout.setVisibility(View.GONE);
     }
 
+    private void logScreenVisit() {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putBoolean("screen_visit", true);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
 
+    private void logFirebaseDataLoad(String api_name, boolean success) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("api_name", api_name);
+        bundle.putBoolean("api_load_success", success);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseClickEvent(String clickItem) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("on_click_item", clickItem);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
 }
