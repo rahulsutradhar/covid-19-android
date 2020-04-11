@@ -19,7 +19,7 @@ public class EngineDistrictDataSuccess {
         this.stateName = stateName;
     }
 
-    public ArrayList<DistrictData> getDostrictData() {
+    public ArrayList<DistrictData> getDistrictData() {
         return dostrictData;
     }
 

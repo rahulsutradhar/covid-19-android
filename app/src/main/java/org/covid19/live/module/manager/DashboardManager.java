@@ -32,8 +32,6 @@ public class DashboardManager implements IDashboardManager, IManager {
     private IEventbus mEventBus;
     private IBusinessExecutor mBusinessExecutor;
     private IDashboardEngine mEngine = new DashboardEngine();
-    private volatile String requestedStateName;
-    private volatile String requestedStateCode;
     private volatile ArrayList<DistrictData> districtDataList = new ArrayList<>();
 
     public static DashboardManager getInstance() {
@@ -102,18 +100,21 @@ public class DashboardManager implements IDashboardManager, IManager {
     public void getDistrictData(String stateName, String stateCode) {
         Log.d(TAG, "getDistrictData");
 
-       /* if (districtDataList.size() != 0) {
+      /*  if (districtDataList.size() > 0 && checkIfDistrictDataAvailable(stateName, stateCode)) {
+            Log.d(TAG, "*Rahul* Local data Available ");
             findSpecificDistrictData(stateName, stateCode);
-        } else {*/
+        } else {
             mEngine.getDistrictData(stateName, stateCode);
-       // }
+        }
+*/
+        mEngine.getDistrictData(stateName, stateCode);
     }
 
     @Subscribe
     public void onDistrictDataEngineSuccess(EngineDistrictDataSuccess successEvent) {
-        Log.d(TAG, "*Rahul* Size Dist - " + successEvent.getDostrictData().size());
+        Log.d(TAG, "*Rahul* Size Dist - " + successEvent.getDistrictData().size());
         districtDataList.clear();
-        districtDataList.addAll(successEvent.getDostrictData());
+        districtDataList.addAll(successEvent.getDistrictData());
 
         /**
          * Find specific district data searched foor
@@ -121,9 +122,19 @@ public class DashboardManager implements IDashboardManager, IManager {
         findSpecificDistrictData(successEvent.getStateName(), successEvent.getStateCode());
     }
 
+    private boolean checkIfDistrictDataAvailable(String stateName, String stateCode) {
+        boolean flag = false;
+        for (DistrictData districtData : districtDataList) {
+            if (stateName.trim().contains(districtData.getState().trim())) {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+
     private void findSpecificDistrictData(String stateName, String stateCode) {
         final ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
-
 
         for (DistrictData districtData : districtDataList) {
             if (stateName.trim().contains(districtData.getState().trim())) {
@@ -131,6 +142,7 @@ public class DashboardManager implements IDashboardManager, IManager {
                 break;
             }
         }
+        Log.d(TAG, "*Rahul* Specific District - " + districtWisesList.size());
 
         mEventBus.post(new IManagerDistrictSuccess() {
             @Override

@@ -7,7 +7,7 @@ import org.covid19.live.module.manager.IDashboardManager;
 
 public class ManagerFactory {
 
-    public static IDashboardManager getStatewiseDataManager() {
+    public static IDashboardManager getDashboardDataManager() {
         return DashboardManager.getInstance();
     }
 }

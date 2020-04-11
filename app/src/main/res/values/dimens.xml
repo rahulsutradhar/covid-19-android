@@ -18,5 +18,7 @@
     <dimen name="text_size_8">8sp</dimen>
     <dimen name="text_size_7">7sp</dimen>
 
+    <dimen name="radius_progress">80dp</dimen>
+
 
 </resources>

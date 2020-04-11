@@ -31,20 +31,20 @@ public class DistrictViewModel extends BaseViewModel {
         businessExecutor.executeInBusinessThread(new Runnable() {
             @Override
             public void run() {
-                ManagerFactory.getStatewiseDataManager().getDistrictData(stateName, stateCode);
+                ManagerFactory.getDashboardDataManager().getDistrictData(stateName, stateCode);
             }
         });
     }
 
     @Subscribe
     public void onDistrictManagerSuccess(IManagerDistrictSuccess successEvent) {
-        Log.d(TAG, "onDistrictManagerSuccess");
+        Log.d(TAG, "*Rahul* onDistrictManagerSuccess - " + successEvent.getDistrictData().size());
         districtListData.postValue(successEvent.getDistrictData());
     }
 
     @Subscribe
     public void onDistrictManagerFailure(IManagerDistrictFailure failureEvent) {
-        Log.d(TAG, "onDistrictManagerFailure");
+        Log.d(TAG, " *Rahul* onDistrictManagerFailure");
         districtListDataFailure.postValue(new Error());
     }
 

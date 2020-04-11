@@ -5,8 +5,8 @@
     style="@style/AppTheme.Card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="4dp"
-    android:layout_marginBottom="4dp">
+    android:layout_marginTop="0.5dp"
+    android:layout_marginBottom="0.5dp">
 
     <!-- Left top information -->
     <androidx.appcompat.widget.AppCompatTextView
