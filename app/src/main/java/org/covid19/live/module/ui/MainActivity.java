@@ -17,14 +17,16 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.CommonUtiity;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.module.entity.StateWise;
-import org.covid19.live.module.ui.adapter.StateWiseAdapter;
+import org.covid19.live.module.ui.adapter.DashboardAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements StateWiseAdapter.Listener {
+public class MainActivity extends AppCompatActivity implements DashboardAdapter.Listener {
 
     public static final String TAG = "MainActivity";
 
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private ArrayList<StateWise> stateWiseList = new ArrayList<>();
-    private StateWiseAdapter adapter;
+    private DashboardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     }
 
     private void setupRecyclerView() {
-        adapter = new StateWiseAdapter(stateWiseList, this);
+        adapter = new DashboardAdapter(stateWiseList, this);
         LinearLayoutManager managerReview = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(managerReview);
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
 
     @Override
     public void onMythBusterFactButtonClicked() {
+        logFirebaseClickEvent("myth_buster_facts_button");
         Intent intent = new Intent(this, FactsActivity.class);
         intent.putExtra("facts_view_type", AppConstant.FACTS_MYTH_BUSTER);
         startActivity(intent);
@@ -133,8 +136,23 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
 
     @Override
     public void onBannerFactButtonClicked() {
+        logFirebaseClickEvent("banner_facts_button");
         Intent intent = new Intent(this, FactsActivity.class);
         intent.putExtra("facts_view_type", AppConstant.FACTS_BANNER);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onVideoIconClicked(CovidVideoInfo covidVideoInfo) {
+        CommonUtiity.watchYoutubeVideo(this, covidVideoInfo.getVideoId(),
+                covidVideoInfo.getVideoLink());
+    }
+
+    @Override
+    public void onVideoViewMoreClicked() {
+        logFirebaseClickEvent("video_show_more_button");
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.VIDEO_LIST_VIEW);
         startActivity(intent);
     }
 

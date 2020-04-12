@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,9 +16,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.covid19.live.R;
 import org.covid19.live.module.entity.DistrictWise;
-import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.module.ui.adapter.DistrictWiseAdapter;
-import org.covid19.live.module.ui.adapter.StateWiseAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 import org.covid19.live.module.ui.viewmodel.DistrictViewModel;
 

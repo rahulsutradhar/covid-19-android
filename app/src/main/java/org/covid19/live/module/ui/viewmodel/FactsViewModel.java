@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.common.data.MythBusterInfo;
 import org.covid19.live.common.factory.ManagerFactory;
 import org.covid19.live.common.viewmodel.BaseViewModel;
@@ -29,6 +30,9 @@ public class FactsViewModel extends BaseViewModel {
     private MutableLiveData<ArrayList<Banner>> bannerLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> bannerErrorLiveData = new MutableLiveData<>();
     private MutableLiveData<Error> bannerNoDataLiveData = new MutableLiveData<>();
+
+    //Video List
+    private MutableLiveData<ArrayList<CovidVideoInfo>> videoListLiveData = new MutableLiveData<>();
 
 
     public FactsViewModel(IEventbus eventbus, IBusinessExecutor businessExecutor) {
@@ -79,6 +83,18 @@ public class FactsViewModel extends BaseViewModel {
     }
 
     /**
+     * fetch local data from Enum
+     */
+    public void requestVideoList() {
+        Log.d(TAG, "requestVideoList");
+        ArrayList<CovidVideoInfo> covidVideoInfos = new ArrayList<>(
+                Arrays.asList(CovidVideoInfo.getVideoList()));
+        //setValue as it is in the same thread
+        videoListLiveData.setValue(covidVideoInfos);
+    }
+
+
+    /**
      * Getter
      */
     public MutableLiveData<ArrayList<MythBusterInfo>> getMythBusterFacts() {
@@ -95,5 +111,9 @@ public class FactsViewModel extends BaseViewModel {
 
     public MutableLiveData<Error> getBannerNoDataLiveData() {
         return bannerNoDataLiveData;
+    }
+
+    public MutableLiveData<ArrayList<CovidVideoInfo>> getVideoListLiveData() {
+        return videoListLiveData;
     }
 }

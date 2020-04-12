@@ -4,24 +4,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.module.entity.StateWise;
 
 import java.util.ArrayList;
 
-public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<StateWise> stateWisesList;
     private Listener listener;
 
-    public StateWiseAdapter(ArrayList<StateWise> stateWisesList, Listener listener) {
+    public DashboardAdapter(ArrayList<StateWise> stateWisesList, Listener listener) {
         this.stateWisesList = stateWisesList;
         this.listener = listener;
     }
@@ -61,6 +65,11 @@ public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     parent, false);
             viewHolder = new ItemBannerCardViewHolder(itemView);
 
+        } else if (AppConstant.CARD_COVID_VIDEO == viewType) {
+
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_card_dashboard_video,
+                    parent, false);
+            viewHolder = new ItemVideoCardViewHolder(itemView);
         }
 
         return viewHolder;
@@ -86,6 +95,12 @@ public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
 
+        } else if (AppConstant.CARD_COVID_VIDEO == getItemViewType(position)) {
+
+            final StateWise stateWise = stateWisesList.get(position);
+            ItemVideoCardViewHolder viewHolder = (ItemVideoCardViewHolder) holder;
+            viewHolder.setData(stateWise);
+
         }
     }
 
@@ -108,6 +123,10 @@ public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void onMythBusterFactButtonClicked();
 
         void onBannerFactButtonClicked();
+
+        void onVideoIconClicked(CovidVideoInfo covidVideoInfo);
+
+        void onVideoViewMoreClicked();
     }
 
     /**
@@ -339,6 +358,56 @@ public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 @Override
                 public void onClick(View v) {
                     listener.onBannerFactButtonClicked();
+                }
+            });
+        }
+    }
+
+    /**
+     * Card Youtube Video
+     */
+    class ItemVideoCardViewHolder extends RecyclerView.ViewHolder {
+        private TextView title;
+        private Button button;
+        private ImageView videoImage, playIcon;
+
+        public ItemVideoCardViewHolder(@NonNull View itemView) {
+            super(itemView);
+            title = itemView.findViewById(R.id.header_title);
+            videoImage = itemView.findViewById(R.id.thumnail);
+            button = itemView.findViewById(R.id.action_button);
+            playIcon = itemView.findViewById(R.id.thumnail_overlay_icon);
+        }
+
+        public void setData(StateWise stateWise) {
+            final CovidVideoInfo covidVideoInfo = stateWise.getCovidVideoInfo();
+            if (covidVideoInfo.getVideoDescription() != null) {
+                title.setText(covidVideoInfo.getVideoDescription());
+            }
+
+            Glide.with(itemView)
+                    .load(covidVideoInfo.getVideoThumnail())
+                    .into(videoImage);
+
+            videoImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onVideoIconClicked(covidVideoInfo);
+                }
+            });
+
+            playIcon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onVideoIconClicked(covidVideoInfo);
+                }
+            });
+
+            button.setText(R.string.dashboard_video_card_button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onVideoViewMoreClicked();
                 }
             });
         }

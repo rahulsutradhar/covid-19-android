@@ -17,17 +17,20 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.CommonUtiity;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.common.data.MythBusterInfo;
 import org.covid19.live.module.entity.Banner;
 import org.covid19.live.module.ui.adapter.BannerFactAdapter;
 import org.covid19.live.module.ui.adapter.MythBusterFactsAdapter;
+import org.covid19.live.module.ui.adapter.VideoListAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 import org.covid19.live.module.ui.viewmodel.DistrictViewModel;
 import org.covid19.live.module.ui.viewmodel.FactsViewModel;
 
 import java.util.ArrayList;
 
-public class FactsActivity extends AppCompatActivity {
+public class FactsActivity extends AppCompatActivity implements VideoListAdapter.Listener {
 
     public static final String TAG = "FactsActivity";
 
@@ -55,6 +58,10 @@ public class FactsActivity extends AppCompatActivity {
     //Banner facts Adapter
     private BannerFactAdapter bannerFactAdapter;
     private ArrayList<Banner> bannersList = new ArrayList<>();
+
+    //Covid Video Adapter
+    private VideoListAdapter videoListAdapter;
+    private ArrayList<CovidVideoInfo> covidVideoInfoList = new ArrayList<>();
 
 
     @Override
@@ -90,6 +97,7 @@ public class FactsActivity extends AppCompatActivity {
 
             //request myth buster info
             requestMythBusterInfo();
+
         } else if (AppConstant.FACTS_BANNER == factsViewType) {
 
             setTitle(R.string.myth_banner_facts_activity_title);
@@ -101,8 +109,20 @@ public class FactsActivity extends AppCompatActivity {
 
             //request banner data
             requestBannerfactsData();
+
+        } else if (AppConstant.VIDEO_LIST_VIEW == factsViewType) {
+
+            setTitle(R.string.covid_video_facts_activity_title);
+            setVideoListRecyclerView();
+
+            //attach observer
+            viewModel.getVideoListLiveData().observe(this, videoObserver);
+
+            //request video data
+            requestVideoListdata();
         }
 
+        logScreenVisit();
     }
 
     @Override
@@ -136,7 +156,7 @@ public class FactsActivity extends AppCompatActivity {
             }
         });
 
-        if (AppConstant.FACTS_MYTH_BUSTER == factsViewType) {
+        if (AppConstant.FACTS_MYTH_BUSTER == factsViewType || AppConstant.VIDEO_LIST_VIEW == factsViewType) {
             swipeRefreshLayout.setEnabled(false);
         } else {
             swipeRefreshLayout.setEnabled(true);
@@ -148,12 +168,14 @@ public class FactsActivity extends AppCompatActivity {
                 if (AppConstant.FACTS_BANNER == factsViewType) {
                     requestBannerfactsData();
                 }
+                logFirebaseClickEvent("retry_button");
             }
         });
 
         noDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                logFirebaseClickEvent("no_data_button");
                 if (AppConstant.FACTS_BANNER == factsViewType) {
                     finish();
                 }
@@ -214,6 +236,9 @@ public class FactsActivity extends AppCompatActivity {
             bannersList.clear();
             bannersList.addAll(banners);
             bannerFactAdapter.notifyDataSetChanged();
+
+            logFirebaseDataLoad("banner_fact_data", true);
+
         }
     };
 
@@ -223,6 +248,8 @@ public class FactsActivity extends AppCompatActivity {
             hideLoader();
             showErrorLayout();
             hideNodataLayout();
+
+            logFirebaseDataLoad("banner_fact_data", false);
         }
     };
 
@@ -232,9 +259,41 @@ public class FactsActivity extends AppCompatActivity {
             hideLoader();
             hideErrorLayout();
             showNodataLayout();
+
+            logFirebaseDataLoad("banner_fact_data", false);
         }
     };
 
+
+    /**
+     * Setup Video Adapter
+     */
+    private void setVideoListRecyclerView() {
+        videoListAdapter = new VideoListAdapter(covidVideoInfoList, this);
+        LinearLayoutManager managerReview = new LinearLayoutManager(this);
+        recyclerView.setAdapter(videoListAdapter);
+        recyclerView.setLayoutManager(managerReview);
+    }
+
+    private void requestVideoListdata() {
+        Log.d(TAG, "requestVideoListdata");
+        viewModel.requestVideoList();
+    }
+
+    private Observer<ArrayList<CovidVideoInfo>> videoObserver = new Observer<ArrayList<CovidVideoInfo>>() {
+        @Override
+        public void onChanged(ArrayList<CovidVideoInfo> covidVideoInfos) {
+            covidVideoInfoList.clear();
+            covidVideoInfoList.addAll(covidVideoInfos);
+            videoListAdapter.notifyDataSetChanged();
+        }
+    };
+
+    @Override
+    public void onVideoIconClicked(CovidVideoInfo covidVideoInfo) {
+        CommonUtiity.watchYoutubeVideo(this, covidVideoInfo.getVideoId(),
+                covidVideoInfo.getVideoLink());
+    }
 
     private void showLoader() {
         loaderLayout.setVisibility(View.VISIBLE);
@@ -260,5 +319,27 @@ public class FactsActivity extends AppCompatActivity {
 
     private void hideNodataLayout() {
         noDataLayout.setVisibility(View.GONE);
+    }
+
+    private void logScreenVisit() {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putBoolean("screen_visit", true);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseDataLoad(String api_name, boolean success) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("api_name", api_name);
+        bundle.putBoolean("api_load_success", success);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseClickEvent(String clickItem) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("on_click_item", clickItem);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 }

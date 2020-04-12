@@ -3,6 +3,7 @@ package org.covid19.live.module.manager;
 import android.util.Log;
 
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.common.interfaces.IManager;
 import org.covid19.live.module.engine.DashboardEngine;
 import org.covid19.live.module.engine.IDashboardEngine;
@@ -85,15 +86,21 @@ public class DashboardManager implements IDashboardManager, IManager {
         mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
         successEvent.getStateWiseList().add(1, mythBuster);
 
+        //add covid video
+        StateWise videoCard = new StateWise();
+        videoCard.setViewType(AppConstant.CARD_COVID_VIDEO);
+        videoCard.setCovidVideoInfo(CovidVideoInfo.getDashboardCardViedeo());
+        successEvent.getStateWiseList().add(2, videoCard);
+
         //Add Banner Facts
         StateWise bannerFacts = new StateWise();
         bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
-        successEvent.getStateWiseList().add(2, bannerFacts);
+        successEvent.getStateWiseList().add(3, bannerFacts);
 
         //Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        successEvent.getStateWiseList().add(3, headerST);
+        successEvent.getStateWiseList().add(4, headerST);
 
         mEventBus.post(new IManagerStatewiseDataSuccess() {
             @Override
