@@ -10,10 +10,12 @@ import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventEngine.EngineDistrictDataSuccess;
 import org.covid19.live.module.eventEngine.IEngineDistrictFailure;
+import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
 import org.covid19.live.module.eventManager.IManagerDistrictFailure;
 import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
+import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
 import org.covid19.live.rest.response.DistrictData;
@@ -136,20 +138,36 @@ public class DashboardManager implements IDashboardManager, IManager {
     private void findSpecificDistrictData(String stateName, String stateCode) {
         final ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
 
+        Log.d(TAG,"*Rahul* findSpecificDistrictData - ");
         for (DistrictData districtData : districtDataList) {
             if (stateName.trim().contains(districtData.getState().trim())) {
                 districtWisesList.addAll(districtData.getDistrictWises());
+                Log.d(TAG,"*Rahul* findSpecificDistrictData - Matches");
                 break;
             }
         }
+        Log.d(TAG,"*Rahul* findSpecificDistrictData - "+districtWisesList.size());
 
-        mEventBus.post(new IManagerDistrictSuccess() {
-            @Override
-            public ArrayList<DistrictWise> getDistrictData() {
-                return districtWisesList;
-            }
-        });
+        /**
+         * Check if data requested is availble or not
+         */
+        if (districtWisesList.size() == 0) {
+            mEventBus.post(new IManagerNoDataAvailable() {
+                @Override
+                public void noDataAvailable() {
 
+                }
+            });
+
+        } else {
+            //data available
+            mEventBus.post(new IManagerDistrictSuccess() {
+                @Override
+                public ArrayList<DistrictWise> getDistrictData() {
+                    return districtWisesList;
+                }
+            });
+        }
     }
 
     @Subscribe
@@ -158,6 +176,17 @@ public class DashboardManager implements IDashboardManager, IManager {
         mEventBus.post(new IManagerDistrictFailure() {
             @Override
             public void districtDataFailure() {
+
+            }
+        });
+    }
+
+    @Subscribe
+    public void onNoDataAvailable(IEngineNoDataAvailable noDataAvailable){
+        Log.d(TAG, "onNoDataAvailable");
+        mEventBus.post(new IManagerNoDataAvailable() {
+            @Override
+            public void noDataAvailable() {
 
             }
         });

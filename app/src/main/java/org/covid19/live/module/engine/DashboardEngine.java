@@ -5,6 +5,7 @@ import android.util.Log;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventEngine.EngineDistrictDataSuccess;
 import org.covid19.live.module.eventEngine.IEngineDistrictFailure;
+import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
 import org.covid19.live.rest.RestHelper;
@@ -107,9 +108,9 @@ public class DashboardEngine implements IDashboardEngine {
 
                                 mEventBus.post(dataSuccess);
                             } else {
-                                mEventBus.post(new IEngineDistrictFailure() {
+                                mEventBus.post(new IEngineNoDataAvailable() {
                                     @Override
-                                    public void districtFailure() {
+                                    public void noDataAvailable() {
 
                                     }
                                 });
