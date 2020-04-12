@@ -330,7 +330,8 @@ public class StateWiseAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             description = itemView.findViewById(R.id.header_subtitle);
             button = itemView.findViewById(R.id.action_button);
 
-            description.setVisibility(View.GONE);
+            description.setText(HtmlCompat.fromHtml(itemView.getContext().getString(R.string.banner_card_description),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT));
             title.setText(R.string.banner_card_title);
             button.setText(R.string.banner_card_button);
 

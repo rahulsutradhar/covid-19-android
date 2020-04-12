@@ -20,6 +20,8 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/description"
         style="@style/AppTheme.Body"
+        android:fontFamily="@font/font_rubrik_light"
+        android:textStyle="bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"

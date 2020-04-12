@@ -15,11 +15,13 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_chevron_right_dark_grey" />
+        tools:src="@drawable/ic_info_outline_grey" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/description"
         style="@style/AppTheme.Body"
+        android:fontFamily="@font/font_rubrik_light"
+        android:textStyle="bold"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="12dp"

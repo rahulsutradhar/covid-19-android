@@ -57,7 +57,7 @@ public class BannerFactAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
 
         public void setData(Banner banner) {
-            icon.setImageResource(R.drawable.ic_chevron_right_dark_grey);
+            icon.setImageResource(R.drawable.ic_info_outline_grey);
             if (banner.getBannerTitle() != null) {
                 description.setText(banner.getBannerTitle());
             }
