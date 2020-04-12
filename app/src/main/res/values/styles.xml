@@ -22,14 +22,24 @@
         <item name="android:background">@color/cw_eeVeryLightGrey</item>
     </style>
 
-    <style name="AppTheme.Button" parent="TextAppearance.AppCompat.Button">
+    <style name="AppTheme.PrimaryButton" parent="TextAppearance.AppCompat.Button">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">40dp</item>
         <item name="android:textSize">18sp</item>
         <item name="textAllCaps">false</item>
-        <item name="android:background">@drawable/button_background</item>
+        <item name="android:background">@drawable/primary_button_background</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
+    </style>
+
+    <style name="AppTheme.SecondaryButton" parent="TextAppearance.AppCompat.Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="textAllCaps">false</item>
+        <item name="android:fontFamily">@font/font_rubrik_semi_bold</item>
+        <item name="android:background">@drawable/secondary_button_background</item>
+        <item name="android:textColor">@color/secondary_button_text_color</item>
     </style>
 
     <style name="AppTheme.Body" parent="TextAppearance.AppCompat.Body1">
@@ -46,8 +56,10 @@
     <style name="AppTheme.Card">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:background">#fff</item>
+        <item name="android:background">@color/grey98</item>
         <item name="android:padding">16dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
     </style>
 
 

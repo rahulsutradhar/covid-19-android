@@ -5,7 +5,7 @@
     style="@style/AppTheme.Container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".module.ui.MainActivity">
+    tools:context=".module.ui.FactsActivity">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swiperefresh_layout"
@@ -17,7 +17,7 @@
             android:layout_height="match_parent">
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list"
+                android:id="@+id/facts_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:background="@android:color/transparent"
@@ -35,5 +35,8 @@
 
     <!-- error Screen -->
     <include layout="@layout/error_layout" />
+
+    <!--No data layout -->
+    <include layout="@layout/layout_card_no_data" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

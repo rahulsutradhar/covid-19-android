@@ -9,7 +9,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -116,15 +115,27 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     }
 
     @Override
-    public void onCardClick(StateWise stateWise) {
-        if (AppConstant.CARD_STATE_WISE == stateWise.getViewType()) {
-            logFirebaseClickEvent(stateWise.getState());
+    public void onStateCardClick(StateWise stateWise) {
+        logFirebaseClickEvent(stateWise.getState());
 
-            Intent intent = new Intent(this, DistrictActivity.class);
-            intent.putExtra("state_name", stateWise.getState());
-            intent.putExtra("state_code", stateWise.getStateCode());
-            startActivity(intent);
-        }
+        Intent intent = new Intent(this, DistrictActivity.class);
+        intent.putExtra("state_name", stateWise.getState());
+        intent.putExtra("state_code", stateWise.getStateCode());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMythBusterFactButtonClicked() {
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.FACTS_MYTH_BUSTER);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBannerFactButtonClicked() {
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.FACTS_BANNER);
+        startActivity(intent);
     }
 
     /**
@@ -135,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(ArrayList<StateWise> stateWises) {
             hideLoader();
             hideErrorLayout();
-            logFirebaseDataLoad("statewise_data",true);
+            logFirebaseDataLoad("statewise_data", true);
             stateWiseList.clear();
             stateWiseList.addAll(stateWises);
             adapter.notifyDataSetChanged();
@@ -148,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
-            logFirebaseDataLoad("statewise_data",false);
+            logFirebaseDataLoad("statewise_data", false);
         }
     };
 
@@ -168,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         errorLayout.setVisibility(View.GONE);
     }
 
-    private void logScreenVisit(){
+    private void logScreenVisit() {
         Bundle bundle = new Bundle();
         bundle.putString("screen_name", TAG);
-        bundle.putBoolean("screen_visit",true );
+        bundle.putBoolean("screen_visit", true);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 

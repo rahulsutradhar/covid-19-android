@@ -73,9 +73,20 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
+        // Add Myth Buster card
+        StateWise mythBuster = new StateWise();
+        mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
+        successEvent.getStateWiseList().add(1, mythBuster);
+
+        //Add Banner Facts
+        StateWise bannerFacts = new StateWise();
+        bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
+        successEvent.getStateWiseList().add(2, bannerFacts);
+
+        //Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        successEvent.getStateWiseList().add(1, headerST);
+        successEvent.getStateWiseList().add(3, headerST);
 
         mEventBus.post(new IManagerStatewiseDataSuccess() {
             @Override

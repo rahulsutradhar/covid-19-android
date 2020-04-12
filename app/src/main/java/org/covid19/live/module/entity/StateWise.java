@@ -2,6 +2,8 @@ package org.covid19.live.module.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.covid19.live.common.data.MythBusterInfo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 

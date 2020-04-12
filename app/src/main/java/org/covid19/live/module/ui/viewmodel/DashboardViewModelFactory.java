@@ -31,6 +31,8 @@ public class DashboardViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DashboardViewModel(eventBus, businessExecutor);
         } else if (modelClass.isAssignableFrom(DistrictViewModel.class)) {
             return (T) new DistrictViewModel(eventBus, businessExecutor);
+        } else if (modelClass.isAssignableFrom(FactsViewModel.class)) {
+            return (T) new FactsViewModel(eventBus, businessExecutor);
         }
         throw new IllegalArgumentException("Unknown model class " + modelClass);
     }
