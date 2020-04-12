@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_title"
+        style="@style/AppTheme.PageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dp"
+        android:textColor="@color/covidSemiDarkGrey"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/myth_buster_card_title" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/thumnail"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/thumnail_overlay_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:srcCompat="@drawable/ic_youtube_play"
+        app:layout_constraintLeft_toLeftOf="@+id/thumnail"
+        app:layout_constraintTop_toTopOf="@+id/thumnail"
+        app:layout_constraintRight_toRightOf="@+id/thumnail"
+        app:layout_constraintBottom_toBottomOf="@+id/thumnail" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/action_button"
+        style="@style/AppTheme.SecondaryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="16dp"
+        tools:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thumnail"
+        tools:text="@string/dashboard_video_card_button" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

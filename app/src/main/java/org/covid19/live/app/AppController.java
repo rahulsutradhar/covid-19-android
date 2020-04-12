@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 import org.covid19.live.lifecycle.ManagerLifeCycleController;
 import org.covid19.live.utilities.threading.BusinessExecutor;
 import org.covid19.live.utilities.threading.IBusinessExecutor;
@@ -23,6 +27,9 @@ public class AppController extends Application {
         mInstance = this;
         sContext = this;
         super.onCreate();
+
+        AppCenter.start(this, "e131676f-2aba-404c-8014-79dcda6cbef3",
+                Analytics.class, Crashes.class);
 
         MainExecutor.getInstance().setMainThreadHandler(new Handler());
         managerLifeCycleController = new ManagerLifeCycleController();

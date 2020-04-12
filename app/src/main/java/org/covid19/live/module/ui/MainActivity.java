@@ -9,21 +9,24 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.CommonUtiity;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.module.entity.StateWise;
-import org.covid19.live.module.ui.adapter.StateWiseAdapter;
+import org.covid19.live.module.ui.adapter.DashboardAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements StateWiseAdapter.Listener {
+public class MainActivity extends AppCompatActivity implements DashboardAdapter.Listener {
 
     public static final String TAG = "MainActivity";
 
@@ -36,14 +39,18 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     private TextView errorMessageView;
     private Button retryButton;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private ArrayList<StateWise> stateWiseList = new ArrayList<>();
-    private StateWiseAdapter adapter;
+    private DashboardAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         setupViewsReference();
         setTitle(R.string.dashboard_title);
@@ -62,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         //fetch data
         fetchStatewiseLatestData();
 
+        logScreenVisit();
     }
 
     private void setupViewsReference() {
@@ -87,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
             @Override
             public void onClick(View v) {
                 fetchStatewiseLatestData();
+                logFirebaseClickEvent("retry_button");
             }
         });
     }
@@ -101,20 +110,50 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
     }
 
     private void setupRecyclerView() {
-        adapter = new StateWiseAdapter(stateWiseList, this);
+        adapter = new DashboardAdapter(stateWiseList, this);
         LinearLayoutManager managerReview = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(managerReview);
     }
 
     @Override
-    public void onCardClick(StateWise stateWise) {
-        if (AppConstant.CARD_STATE_WISE == stateWise.getViewType()) {
-            Intent intent = new Intent(this, DistrictActivity.class);
-            intent.putExtra("state_name", stateWise.getState());
-            intent.putExtra("state_code", stateWise.getStateCode());
-            startActivity(intent);
-        }
+    public void onStateCardClick(StateWise stateWise) {
+        logFirebaseClickEvent(stateWise.getState());
+
+        Intent intent = new Intent(this, DistrictActivity.class);
+        intent.putExtra("state_name", stateWise.getState());
+        intent.putExtra("state_code", stateWise.getStateCode());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onMythBusterFactButtonClicked() {
+        logFirebaseClickEvent("myth_buster_facts_button");
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.FACTS_MYTH_BUSTER);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onBannerFactButtonClicked() {
+        logFirebaseClickEvent("banner_facts_button");
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.FACTS_BANNER);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onVideoIconClicked(CovidVideoInfo covidVideoInfo) {
+        CommonUtiity.watchYoutubeVideo(this, covidVideoInfo.getVideoId(),
+                covidVideoInfo.getVideoLink());
+    }
+
+    @Override
+    public void onVideoViewMoreClicked() {
+        logFirebaseClickEvent("video_show_more_button");
+        Intent intent = new Intent(this, FactsActivity.class);
+        intent.putExtra("facts_view_type", AppConstant.VIDEO_LIST_VIEW);
+        startActivity(intent);
     }
 
     /**
@@ -125,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(ArrayList<StateWise> stateWises) {
             hideLoader();
             hideErrorLayout();
-            Log.d(TAG, "*Rahul* State data Success - " + stateWises.size());
+            logFirebaseDataLoad("statewise_data", true);
             stateWiseList.clear();
             stateWiseList.addAll(stateWises);
             adapter.notifyDataSetChanged();
@@ -138,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
-            Log.d(TAG, "*Rahul* State data Failure");
+            logFirebaseDataLoad("statewise_data", false);
         }
     };
 
@@ -156,6 +195,28 @@ public class MainActivity extends AppCompatActivity implements StateWiseAdapter.
 
     private void hideErrorLayout() {
         errorLayout.setVisibility(View.GONE);
+    }
+
+    private void logScreenVisit() {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putBoolean("screen_visit", true);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseDataLoad(String api_name, boolean success) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("api_name", api_name);
+        bundle.putBoolean("api_load_success", success);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    }
+
+    private void logFirebaseClickEvent(String clickItem) {
+        Bundle bundle = new Bundle();
+        bundle.putString("screen_name", TAG);
+        bundle.putString("on_click_item", clickItem);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
 }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme.Card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/action_button"
+        style="@style/AppTheme.SecondaryButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_subtitle"
+        tools:text="@string/myth_buster_card_fact_button" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_subtitle"
+        style="@style/AppTheme.Body"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:lineSpacingExtra="3dp"
+        android:textColor="@color/covidDarkGrey"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/header_title"
+        tools:text="@string/myth_buster_card_description" />
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/header_title"
+        style="@style/AppTheme.PageTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="5dp"
+        android:textColor="@color/covidSemiDarkGrey"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/myth_buster_card_title" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

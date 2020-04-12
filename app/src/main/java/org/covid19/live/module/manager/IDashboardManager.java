@@ -6,4 +6,6 @@ public interface IDashboardManager {
     void getStatewiseData();
 
     void getDistrictData(String stateName,String stateCode);
+
+    void getBannerFactsData();
 }
