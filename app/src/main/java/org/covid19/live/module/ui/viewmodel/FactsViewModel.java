@@ -5,8 +5,11 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import org.covid19.live.common.data.MythBusterInfo;
+import org.covid19.live.common.factory.ManagerFactory;
 import org.covid19.live.common.viewmodel.BaseViewModel;
 import org.covid19.live.module.entity.Banner;
+import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
+import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
 import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
 import org.covid19.live.utilities.eventbus.IEventbus;
 import org.covid19.live.utilities.threading.IBusinessExecutor;
@@ -43,10 +46,36 @@ public class FactsViewModel extends BaseViewModel {
         mythBusterFacts.setValue(mythBusterInfos);
     }
 
+    /**
+     * Request Banner data
+     */
+    public void requestBannerFacts() {
+        Log.d(TAG, "requestBannerFacts");
+        businessExecutor.executeInBusinessThread(new Runnable() {
+            @Override
+            public void run() {
+                ManagerFactory.getDashboardDataManager().getBannerFactsData();
+            }
+        });
+    }
+
+
     @Subscribe
-    public void onManagerBannerFactsData(IManagerBannerFactsSuccess success) {
+    public void onManagerBannerFactsSuccess(IManagerBannerFactsSuccess success) {
         Log.d(TAG, "onManagerBannerFactsData");
         bannerLiveData.postValue(success.getBannerList());
+    }
+
+    @Subscribe
+    public void onManagerBannerFactsFailure(IManagerBannerFactFailure factFailure) {
+        Log.d(TAG, "onManagerBannerFactsFailure");
+        bannerErrorLiveData.postValue(new Error());
+    }
+
+    @Subscribe
+    public void onManagerBannerFactsNoData(IManagerBannerFactsNoData success) {
+        Log.d(TAG, "onManagerBannerFactsNoData");
+        bannerNoDataLiveData.postValue(new Error());
     }
 
     /**

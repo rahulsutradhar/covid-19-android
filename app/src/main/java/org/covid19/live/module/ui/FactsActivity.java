@@ -54,7 +54,7 @@ public class FactsActivity extends AppCompatActivity {
 
     //Banner facts Adapter
     private BannerFactAdapter bannerFactAdapter;
-    private ArrayList<Banner> banners = new ArrayList<>();
+    private ArrayList<Banner> bannersList = new ArrayList<>();
 
 
     @Override
@@ -95,7 +95,12 @@ public class FactsActivity extends AppCompatActivity {
             setTitle(R.string.myth_banner_facts_activity_title);
             setBannerRecyclerView();
 
-            viewModel.getMythBusterFacts().observe(this, mythBusterObserver);
+            viewModel.getBannerLiveData().observe(this, bannerObserverSuccess);
+            viewModel.getBannerErrorLiveData().observe(this, bannerObserverFailure);
+            viewModel.getBannerNoDataLiveData().observe(this, bannerObserverNoData);
+
+            //request banner data
+            requestBannerfactsData();
         }
 
     }
@@ -125,6 +130,9 @@ public class FactsActivity extends AppCompatActivity {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
+                if (AppConstant.FACTS_BANNER == factsViewType) {
+                    requestBannerfactsData();
+                }
             }
         });
 
@@ -137,14 +145,18 @@ public class FactsActivity extends AppCompatActivity {
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (AppConstant.FACTS_BANNER == factsViewType) {
+                    requestBannerfactsData();
+                }
             }
         });
 
         noDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (AppConstant.FACTS_BANNER == factsViewType) {
+                    finish();
+                }
             }
         });
     }
@@ -179,30 +191,47 @@ public class FactsActivity extends AppCompatActivity {
      * Myth Bannerr Fact Adapter
      */
     private void setBannerRecyclerView() {
-        bannerFactAdapter = new BannerFactAdapter(banners);
+        bannerFactAdapter = new BannerFactAdapter(bannersList);
         LinearLayoutManager managerReview = new LinearLayoutManager(this);
         recyclerView.setAdapter(bannerFactAdapter);
         recyclerView.setLayoutManager(managerReview);
     }
 
+    private void requestBannerfactsData() {
+        Log.d(TAG, "requestBannerfactsData");
+        showLoader();
+        hideErrorLayout();
+        hideNodataLayout();
+        viewModel.requestBannerFacts();
+    }
+
     private Observer<ArrayList<Banner>> bannerObserverSuccess = new Observer<ArrayList<Banner>>() {
         @Override
         public void onChanged(ArrayList<Banner> banners) {
-
+            hideErrorLayout();
+            hideLoader();
+            hideNodataLayout();
+            bannersList.clear();
+            bannersList.addAll(banners);
+            bannerFactAdapter.notifyDataSetChanged();
         }
     };
 
     private Observer<Error> bannerObserverFailure = new Observer<Error>() {
         @Override
         public void onChanged(Error error) {
-
+            hideLoader();
+            showErrorLayout();
+            hideNodataLayout();
         }
     };
 
     private Observer<Error> bannerObserverNoData = new Observer<Error>() {
         @Override
         public void onChanged(Error error) {
-
+            hideLoader();
+            hideErrorLayout();
+            showNodataLayout();
         }
     };
 
@@ -227,5 +256,9 @@ public class FactsActivity extends AppCompatActivity {
         noDataLayout.setVisibility(View.VISIBLE);
         noDataMessageView.setText(R.string.no_data_facts_message);
         noDataButton.setText(R.string.no_data_button_text);
+    }
+
+    private void hideNodataLayout() {
+        noDataLayout.setVisibility(View.GONE);
     }
 }

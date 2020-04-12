@@ -1,5 +1,6 @@
 package org.covid19.live.rest;
 
+import org.covid19.live.rest.response.BannerResponse;
 import org.covid19.live.rest.response.DashboardResponse;
 import org.covid19.live.rest.response.DistrictData;
 
@@ -18,6 +19,19 @@ public interface APIService {
     @GET("data.json")
     Call<DashboardResponse> fetchStatewiseData();
 
+    /**
+     * District wise data
+     *
+     * @return
+     */
     @GET("v2/state_district_wise.json")
     Call<ArrayList<DistrictData>> fetchDistrictwiseData();
+
+    /**
+     * Banner Data
+     *
+     * @return
+     */
+    @GET("website_data.json")
+    Call<BannerResponse> fetchBannerData();
 }

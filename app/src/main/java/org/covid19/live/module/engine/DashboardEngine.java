@@ -2,13 +2,18 @@ package org.covid19.live.module.engine;
 
 import android.util.Log;
 
+import org.covid19.live.module.entity.Banner;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventEngine.EngineDistrictDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsNoData;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsSuccess;
 import org.covid19.live.module.eventEngine.IEngineDistrictFailure;
 import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
 import org.covid19.live.rest.RestHelper;
+import org.covid19.live.rest.response.BannerResponse;
 import org.covid19.live.rest.response.DashboardResponse;
 import org.covid19.live.rest.response.DistrictData;
 import org.covid19.live.utilities.eventbus.EventbusImpl;
@@ -130,5 +135,53 @@ public class DashboardEngine implements IDashboardEngine {
                         });
                     }
                 });
+    }
+
+    @Override
+    public void getBannerFactsData() {
+        Log.d(TAG, "getBannerFactsData");
+
+        RestHelper.getAPIService()
+                .fetchBannerData()
+                .enqueue(new Callback<BannerResponse>() {
+                    @Override
+                    public void onResponse(Call<BannerResponse> call, Response<BannerResponse> response) {
+                        try {
+                            if (response.isSuccessful() && response.body() != null) {
+
+                                final ArrayList<Banner> banners = new ArrayList<>();
+                                banners.addAll(response.body().getBannerArrayList());
+
+                                mEventBus.post(new IEngineBannerFactsSuccess() {
+                                    @Override
+                                    public ArrayList<Banner> getBannerList() {
+                                        return banners;
+                                    }
+                                });
+                            } else {
+
+                                mEventBus.post(new IEngineBannerFactsNoData() {
+                                    @Override
+                                    public Error getErrorMessage() {
+                                        return new Error();
+                                    }
+                                });
+                            }
+                        } catch (Exception e) {
+                            Log.d(TAG, e.getMessage());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BannerResponse> call, Throwable t) {
+                        mEventBus.post(new IEngineBannerFactFailure() {
+                            @Override
+                            public Error getErrorMessage() {
+                                return new Error();
+                            }
+                        });
+                    }
+                });
+
     }
 }

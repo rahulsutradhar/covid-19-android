@@ -6,13 +6,20 @@ import org.covid19.live.common.AppConstant;
 import org.covid19.live.common.interfaces.IManager;
 import org.covid19.live.module.engine.DashboardEngine;
 import org.covid19.live.module.engine.IDashboardEngine;
+import org.covid19.live.module.entity.Banner;
 import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventEngine.EngineDistrictDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsNoData;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsSuccess;
 import org.covid19.live.module.eventEngine.IEngineDistrictFailure;
 import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
+import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
+import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
+import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
 import org.covid19.live.module.eventManager.IManagerDistrictFailure;
 import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
 import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
@@ -149,15 +156,12 @@ public class DashboardManager implements IDashboardManager, IManager {
     private void findSpecificDistrictData(String stateName, String stateCode) {
         final ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
 
-        Log.d(TAG,"*Rahul* findSpecificDistrictData - ");
         for (DistrictData districtData : districtDataList) {
             if (stateName.trim().contains(districtData.getState().trim())) {
                 districtWisesList.addAll(districtData.getDistrictWises());
-                Log.d(TAG,"*Rahul* findSpecificDistrictData - Matches");
                 break;
             }
         }
-        Log.d(TAG,"*Rahul* findSpecificDistrictData - "+districtWisesList.size());
 
         /**
          * Check if data requested is availble or not
@@ -193,8 +197,8 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Subscribe
-    public void onNoDataAvailable(IEngineNoDataAvailable noDataAvailable){
-        Log.d(TAG, "onNoDataAvailable");
+    public void onDistrictNoDataAvailable(IEngineNoDataAvailable noDataAvailable) {
+        Log.d(TAG, "onDistrictNoDataAvailable");
         mEventBus.post(new IManagerNoDataAvailable() {
             @Override
             public void noDataAvailable() {
@@ -202,4 +206,47 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         });
     }
+
+    /**
+     * Banner fact Data
+     */
+    @Override
+    public void getBannerFactsData() {
+        Log.d(TAG, "getBannerFactsData");
+        mEngine.getBannerFactsData();
+    }
+
+    @Subscribe
+    public void onBannerFactsEngineSuccess(final IEngineBannerFactsSuccess successEvent) {
+        Log.d(TAG, "onBannerFactsEngineSuccess");
+        mEventBus.post(new IManagerBannerFactsSuccess() {
+            @Override
+            public ArrayList<Banner> getBannerList() {
+                return successEvent.getBannerList();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onBannerFactsEngineFailure(IEngineBannerFactFailure failureEvent) {
+        Log.d(TAG, "onBannerFactsEngineFailure");
+        mEventBus.post(new IManagerBannerFactFailure() {
+            @Override
+            public Error getErrorMessage() {
+                return new Error();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onBannerFactsNoDataAvailable(IEngineBannerFactsNoData noDataAvailable) {
+        Log.d(TAG, "onBannerFactsNoDataAvailable");
+        mEventBus.post(new IManagerBannerFactsNoData() {
+            @Override
+            public Error getErrorMessage() {
+                return new Error();
+            }
+        });
+    }
+
 }
