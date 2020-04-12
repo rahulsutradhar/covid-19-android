@@ -50,7 +50,7 @@
 
     <!--Information Banner Facts -->
     <string name="banner_card_title">Essential information and responsibility of Indian Citizens</string>
-    <string name="banner_card_button">View information</string>
+    <string name="banner_card_button">View More</string>
     <string name="banner_card_description"><![CDATA[<b>#BreakTheChain</b> of unverified <b>WhatsApp</b> forwards which spread wrong information! Do not forward unless you verify it.]]></string>
 
 
