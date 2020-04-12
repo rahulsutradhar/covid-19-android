@@ -7,8 +7,8 @@
 
     <string name="no_data_button_text">Go Back</string>
 
-    <string name="total_card_title">COVID-19 Tracker</string>
-    <string name="total_card_subtitle">Source covid19india.org</string>
+    <string name="total_card_title">COVID-19 India</string>
+    <string name="total_card_subtitle">A crowdsourced initiative</string>
 
     <string name="last_updated_at">Last updated</string>
 
