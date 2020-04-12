@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,7 +17,6 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.covid19.live.R;
 import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.ui.adapter.DistrictWiseAdapter;
-import org.covid19.live.module.ui.adapter.StateWiseAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 import org.covid19.live.module.ui.viewmodel.DistrictViewModel;
 
@@ -41,6 +39,10 @@ public class DistrictActivity extends AppCompatActivity {
     private View errorLayout;
     private TextView errorMessageView;
     private Button retryButton;
+
+    private View noDataLayout;
+    private TextView noDataMessageView;
+    private Button noDataButton;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -72,6 +74,7 @@ public class DistrictActivity extends AppCompatActivity {
 
         viewModel.getDistrictListData().observe(this, districtListSuccess);
         viewModel.getDistrictListDataFailure().observe(this, districtListFailure);
+        viewModel.getNodataAvailable().observe(this, noDataAvailable);
 
         //setuprecyclerview
         setupRecyclerView();
@@ -97,6 +100,10 @@ public class DistrictActivity extends AppCompatActivity {
         errorMessageView = findViewById(R.id.error_message);
         retryButton = findViewById(R.id.retry_button);
 
+        noDataLayout = findViewById(R.id.no_data_layout);
+        noDataMessageView = findViewById(R.id.no_data_message);
+        noDataButton = findViewById(R.id.button);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -115,6 +122,14 @@ public class DistrictActivity extends AppCompatActivity {
                 logFirebaseClickEvent("retry_button");
             }
         });
+
+        noDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logFirebaseClickEvent("no_data_button");
+                finish();
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -130,6 +145,7 @@ public class DistrictActivity extends AppCompatActivity {
     private void fetchDistrictData() {
         showLoader();
         hideErrorLayout();
+        hideNodataLayout();
         viewModel.fetchDistrictData(stateName, stateCode);
     }
 
@@ -141,6 +157,7 @@ public class DistrictActivity extends AppCompatActivity {
         public void onChanged(ArrayList<DistrictWise> districtWises) {
             hideErrorLayout();
             hideLoader();
+            hideNodataLayout();
 
             districtWisesList.clear();
             districtWisesList.addAll(districtWises);
@@ -155,6 +172,17 @@ public class DistrictActivity extends AppCompatActivity {
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
+            hideNodataLayout();
+            logFirebaseDataLoad("district_data", false);
+        }
+    };
+
+    private Observer<Error> noDataAvailable = new Observer<Error>() {
+        @Override
+        public void onChanged(Error error) {
+            hideLoader();
+            hideErrorLayout();
+            showNodataLayout();
             logFirebaseDataLoad("district_data", false);
         }
     };
@@ -174,6 +202,16 @@ public class DistrictActivity extends AppCompatActivity {
 
     private void hideErrorLayout() {
         errorLayout.setVisibility(View.GONE);
+    }
+
+    private void showNodataLayout() {
+        noDataLayout.setVisibility(View.VISIBLE);
+        noDataMessageView.setText(R.string.no_data_state_message);
+        noDataButton.setText(R.string.no_data_button_text);
+    }
+
+    private void hideNodataLayout() {
+        noDataLayout.setVisibility(View.GONE);
     }
 
     private void logScreenVisit() {

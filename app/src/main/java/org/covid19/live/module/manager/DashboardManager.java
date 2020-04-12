@@ -3,17 +3,27 @@ package org.covid19.live.module.manager;
 import android.util.Log;
 
 import org.covid19.live.common.AppConstant;
+import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.common.interfaces.IManager;
 import org.covid19.live.module.engine.DashboardEngine;
 import org.covid19.live.module.engine.IDashboardEngine;
+import org.covid19.live.module.entity.Banner;
 import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventEngine.EngineDistrictDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsNoData;
+import org.covid19.live.module.eventEngine.IEngineBannerFactsSuccess;
 import org.covid19.live.module.eventEngine.IEngineDistrictFailure;
+import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
+import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
+import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
+import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
+import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
 import org.covid19.live.module.eventManager.IManagerDistrictFailure;
 import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
+import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
 import org.covid19.live.rest.response.DistrictData;
@@ -71,9 +81,26 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
+        // Add Myth Buster card
+        StateWise mythBuster = new StateWise();
+        mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
+        successEvent.getStateWiseList().add(1, mythBuster);
+
+        //add covid video
+        StateWise videoCard = new StateWise();
+        videoCard.setViewType(AppConstant.CARD_COVID_VIDEO);
+        videoCard.setCovidVideoInfo(CovidVideoInfo.getDashboardCardViedeo());
+        successEvent.getStateWiseList().add(2, videoCard);
+
+        //Add Banner Facts
+        StateWise bannerFacts = new StateWise();
+        bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
+        successEvent.getStateWiseList().add(3, bannerFacts);
+
+        //Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        successEvent.getStateWiseList().add(1, headerST);
+        successEvent.getStateWiseList().add(4, headerST);
 
         mEventBus.post(new IManagerStatewiseDataSuccess() {
             @Override
@@ -143,13 +170,26 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
-        mEventBus.post(new IManagerDistrictSuccess() {
-            @Override
-            public ArrayList<DistrictWise> getDistrictData() {
-                return districtWisesList;
-            }
-        });
+        /**
+         * Check if data requested is availble or not
+         */
+        if (districtWisesList.size() == 0) {
+            mEventBus.post(new IManagerNoDataAvailable() {
+                @Override
+                public void noDataAvailable() {
 
+                }
+            });
+
+        } else {
+            //data available
+            mEventBus.post(new IManagerDistrictSuccess() {
+                @Override
+                public ArrayList<DistrictWise> getDistrictData() {
+                    return districtWisesList;
+                }
+            });
+        }
     }
 
     @Subscribe
@@ -162,4 +202,58 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         });
     }
+
+    @Subscribe
+    public void onDistrictNoDataAvailable(IEngineNoDataAvailable noDataAvailable) {
+        Log.d(TAG, "onDistrictNoDataAvailable");
+        mEventBus.post(new IManagerNoDataAvailable() {
+            @Override
+            public void noDataAvailable() {
+
+            }
+        });
+    }
+
+    /**
+     * Banner fact Data
+     */
+    @Override
+    public void getBannerFactsData() {
+        Log.d(TAG, "getBannerFactsData");
+        mEngine.getBannerFactsData();
+    }
+
+    @Subscribe
+    public void onBannerFactsEngineSuccess(final IEngineBannerFactsSuccess successEvent) {
+        Log.d(TAG, "onBannerFactsEngineSuccess");
+        mEventBus.post(new IManagerBannerFactsSuccess() {
+            @Override
+            public ArrayList<Banner> getBannerList() {
+                return successEvent.getBannerList();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onBannerFactsEngineFailure(IEngineBannerFactFailure failureEvent) {
+        Log.d(TAG, "onBannerFactsEngineFailure");
+        mEventBus.post(new IManagerBannerFactFailure() {
+            @Override
+            public Error getErrorMessage() {
+                return new Error();
+            }
+        });
+    }
+
+    @Subscribe
+    public void onBannerFactsNoDataAvailable(IEngineBannerFactsNoData noDataAvailable) {
+        Log.d(TAG, "onBannerFactsNoDataAvailable");
+        mEventBus.post(new IManagerBannerFactsNoData() {
+            @Override
+            public Error getErrorMessage() {
+                return new Error();
+            }
+        });
+    }
+
 }

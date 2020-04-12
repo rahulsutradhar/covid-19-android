@@ -9,6 +9,7 @@ import org.covid19.live.common.viewmodel.BaseViewModel;
 import org.covid19.live.module.entity.DistrictWise;
 import org.covid19.live.module.eventManager.IManagerDistrictFailure;
 import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
+import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.utilities.eventbus.IEventbus;
 import org.covid19.live.utilities.threading.IBusinessExecutor;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +22,7 @@ public class DistrictViewModel extends BaseViewModel {
 
     private MutableLiveData<ArrayList<DistrictWise>> districtListData = new MutableLiveData<>();
     private MutableLiveData<Error> districtListDataFailure = new MutableLiveData<>();
+    private MutableLiveData<Error> nodataAvailable = new MutableLiveData<>();
 
     public DistrictViewModel(IEventbus eventbus, IBusinessExecutor businessExecutor) {
         super(eventbus, businessExecutor);
@@ -48,11 +50,26 @@ public class DistrictViewModel extends BaseViewModel {
         districtListDataFailure.postValue(new Error());
     }
 
+    @Subscribe
+    public void onNoDistrictDataAvailable(IManagerNoDataAvailable noDataAvailable) {
+        Log.d(TAG, "onNoDistrictDataAvailable");
+        nodataAvailable.postValue(new Error());
+    }
+
+    /**
+     * Getter Livedata
+     *
+     * @return
+     */
     public MutableLiveData<ArrayList<DistrictWise>> getDistrictListData() {
         return districtListData;
     }
 
     public MutableLiveData<Error> getDistrictListDataFailure() {
         return districtListDataFailure;
+    }
+
+    public MutableLiveData<Error> getNodataAvailable() {
+        return nodataAvailable;
     }
 }

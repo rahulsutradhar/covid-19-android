@@ -2,10 +2,14 @@
     <string name="app_name">Covid-19 live</string>
     <string name="dashboard_title">COVID-19 Dashboard</string>
     <string name="error_message">Something went wrong at our end!</string>
+    <string name="no_data_state_message">Sorry!! Requested data of state is not available.</string>
+    <string name="no_data_facts_message">Sorry!! Requested data is not available.</string>
     <string name="retry_text">RETRY</string>
 
-    <string name="total_card_title">COVID-19 Tracker</string>
-    <string name="total_card_subtitle">Source covid19india.org</string>
+    <string name="no_data_button_text">Go Back</string>
+
+    <string name="total_card_title">COVID-19 India</string>
+    <string name="total_card_subtitle">A crowdsourced initiative</string>
 
     <string name="last_updated_at">Last updated</string>
 
@@ -17,5 +21,40 @@
     <string name="state_ut_header_title">State/UT Report</string>
     <string name="state_ut_subheader_title">COMPILED FROM STATE GOVT. NUMBERS KNOW MORE</string>
     <string name="splash_title">COVID-19 LIVE\nIndia</string>
+
+    <!--Mystery buster -->
+    <string name="myth_buster_card_title">Myth Busters! There is a lot of false information around. These are the facts.</string>
+    <string name="myth_buster_card_description"> <![CDATA[People of all ages CAN be infected by the coronavirus. Older people, and people with pre-existing medical conditions (such as <b>asthma</b>, <b>diabetes</b>, <b>heart disease</b>) appear to be more vulnerable to becoming severely ill with the virus.]]></string>
+    <string name="myth_buster_card_fact_button">View Facts</string>
+
+    <!-- Description Myth Buster Facts-->
+    <string name="description_1">Cold weather and snow CANNOT kill the CoronaVirus .</string>
+    <string name="description_2">Hand dryers are NOT effective in killing the coronavirus.</string>
+    <string name="description_3">There is NO evidence that regularly rinsing the nose with saline has protected people from infection with the coronavirus.</string>
+    <string name="description_4">The coronavirus CAN be transmitted in areas with hot and humid climates.</string>
+    <string name="description_5">Ultraviolet light SHOULD NOT be used for sterilization and can cause skin irritation.</string>
+    <string name="description_6">Garlic is healthy but there is NO evidence from the current outbreak that eating garlic has protected people from the coronavirus.</string>
+    <string name="description_7">The coronavirus CANNOT be transmitted through mosquito bites.</string>
+    <string name="description_8">Thermal scanners CAN detect if people have a fever but CANNOT detect whether or not someone has the coronavirus.</string>
+    <string name="description_9">Antibiotics DO NOT work against viruses, antibiotics only work against bacteria.</string>
+    <string name="description_10">There is NO evidence that companion animals/pets such as dogs or cats can transmit the coronavirus.</string>
+    <string name="description_11">Spraying alcohol or chlorine all over your body WILL NOT kill viruses that have already entered your body.</string>
+    <string name="description_12">To date, there is NO specific medicine recommended to prevent or treat the coronavirus.</string>
+    <string name="description_13">Taking a hot bath DOES NOT prevent the coronavirus.</string>
+    <string name="description_14">Vaccines against pneumonia, such as pneumococcal vaccine and Haemophilus influenzae type b (Hib) vaccine, DO NOT provide protection against the coronavirus.</string>
+    <string name="description_source"><![CDATA[Note : Content is Sourced from <b>World Health Organization</b>.]]></string>
+
+
+    <string name="myth_buster_facts_activity_title">Myth Buster Facts</string>
+    <string name="myth_banner_facts_activity_title">Important Facts</string>
+
+    <!--Information Banner Facts -->
+    <string name="banner_card_title">Essential information and responsibility of Indian Citizens</string>
+    <string name="banner_card_button">View Information</string>
+    <string name="banner_card_description"><![CDATA[<b>#BreakTheChain</b> of unverified <b>WhatsApp</b> forwards which spread wrong information! Do not forward unless you verify it.]]></string>
+
+    <!-- Video content-->
+    <string name="dashboard_video_card_button">Show More Videos</string>
+    <string name="covid_video_facts_activity_title">COVID-19 Videos</string>
 
 </resources>

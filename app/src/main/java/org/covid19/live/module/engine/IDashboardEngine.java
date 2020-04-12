@@ -8,4 +8,6 @@ public interface IDashboardEngine {
 
     void getDistrictData(String stateName, String stateCode);
 
+    void getBannerFactsData();
+
 }

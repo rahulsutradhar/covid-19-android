@@ -2,6 +2,9 @@ package org.covid19.live.module.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.covid19.live.common.data.CovidVideoInfo;
+import org.covid19.live.common.data.MythBusterInfo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -38,6 +41,8 @@ public class StateWise implements Serializable {
     private String deltadeathsCount;
 
     private int viewType;
+
+    private CovidVideoInfo covidVideoInfo;
 
     /**
      * ViewType
@@ -141,5 +146,13 @@ public class StateWise implements Serializable {
 
     public void setDeltadeathsCount(String deltadeathsCount) {
         this.deltadeathsCount = deltadeathsCount;
+    }
+
+    public CovidVideoInfo getCovidVideoInfo() {
+        return covidVideoInfo;
+    }
+
+    public void setCovidVideoInfo(CovidVideoInfo covidVideoInfo) {
+        this.covidVideoInfo = covidVideoInfo;
     }
 }
