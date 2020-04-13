@@ -18,6 +18,7 @@ import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
 import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
+import org.covid19.live.module.eventEngine.IEngineStatewiseNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
 import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
 import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
@@ -26,6 +27,7 @@ import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
 import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
+import org.covid19.live.module.eventManager.IManagerStatewiseNoDataAvailable;
 import org.covid19.live.rest.response.DistrictData;
 import org.covid19.live.utilities.eventbus.EventbusImpl;
 import org.covid19.live.utilities.eventbus.IEventbus;
@@ -70,10 +72,13 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Subscribe
-    public void onEngineStatewiseDataSuccess(final IEngineStatewiseDataSuccess successEvent) {
+    public void onEngineStatewiseDataSuccess(IEngineStatewiseDataSuccess successEvent) {
         Log.d(TAG, "onEngineStatewiseDataSuccess");
+
+        final ArrayList<StateWise> dashboardCardList = successEvent.getStateWiseList();
+
         //modify data
-        for (StateWise stateWise : successEvent.getStateWiseList()) {
+        for (StateWise stateWise : dashboardCardList) {
             if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
                 stateWise.setViewType(AppConstant.CARD_TOTAL);
             } else {
@@ -81,33 +86,55 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
+        //Add Data Source Card at end
+        StateWise dataSource = new StateWise();
+        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
+        dashboardCardList.add(dataSource);
+
+
+        ArrayList<StateWise> intermediateCardList = new ArrayList<>();
+        addDashboardIntermdiateDatacard(intermediateCardList);
+
+        /**
+         * Add this list to origin list
+         */
+        dashboardCardList.addAll(1, intermediateCardList);
+
+
+        mEventBus.post(new IManagerStatewiseDataSuccess() {
+            @Override
+            public ArrayList<StateWise> getStateWiseList() {
+                return dashboardCardList;
+            }
+        });
+    }
+
+    /**
+     * this Add Intermediate card
+     *
+     * @param intermediateCardList
+     */
+    private void addDashboardIntermdiateDatacard(ArrayList<StateWise> intermediateCardList) {
         // Add Myth Buster card
         StateWise mythBuster = new StateWise();
         mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
-        successEvent.getStateWiseList().add(1, mythBuster);
+        intermediateCardList.add(mythBuster);
 
         //add covid video
         StateWise videoCard = new StateWise();
         videoCard.setViewType(AppConstant.CARD_COVID_VIDEO);
         videoCard.setCovidVideoInfo(CovidVideoInfo.getDashboardCardViedeo());
-        successEvent.getStateWiseList().add(2, videoCard);
+        intermediateCardList.add(videoCard);
 
         //Add Banner Facts
         StateWise bannerFacts = new StateWise();
         bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
-        successEvent.getStateWiseList().add(3, bannerFacts);
+        intermediateCardList.add(bannerFacts);
 
         //Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        successEvent.getStateWiseList().add(4, headerST);
-
-        mEventBus.post(new IManagerStatewiseDataSuccess() {
-            @Override
-            public ArrayList<StateWise> getStateWiseList() {
-                return successEvent.getStateWiseList();
-            }
-        });
+        intermediateCardList.add(headerST);
     }
 
     @Subscribe
@@ -119,7 +146,17 @@ public class DashboardManager implements IDashboardManager, IManager {
 
             }
         });
+    }
 
+    @Subscribe
+    public void onEngineStatewiseNoDataAvailable(IEngineStatewiseNoDataAvailable failure) {
+        Log.d(TAG, "onEngineStatewiseNoDataAvailable");
+        mEventBus.post(new IManagerStatewiseNoDataAvailable() {
+            @Override
+            public Error getNoDataError() {
+                return new Error();
+            }
+        });
     }
 
 
@@ -127,13 +164,20 @@ public class DashboardManager implements IDashboardManager, IManager {
     public void getDistrictData(String stateName, String stateCode) {
         Log.d(TAG, "getDistrictData");
 
-      /*  if (districtDataList.size() > 0 && checkIfDistrictDataAvailable(stateName, stateCode)) {
-            Log.d(TAG, "*Rahul* Local data Available ");
-            findSpecificDistrictData(stateName, stateCode);
+        /*if (districtDataList.size() > 0) {
+            Log.d(TAG, "*Rahul* getDistrictData() check locally ");
+
+            //Find if spefic district data is Available or not
+            ArrayList<DistrictWise> districtWisesList = searchDistrictDataLocally(stateName, stateCode);
+
+            //send information back to caller
+            sendDistrictData(districtWisesList,true);
+
         } else {
+            Log.d(TAG, "*Rahul* getDistrictData() Request Server ");
             mEngine.getDistrictData(stateName, stateCode);
-        }
-*/
+        }*/
+
         mEngine.getDistrictData(stateName, stateCode);
     }
 
@@ -143,24 +187,22 @@ public class DashboardManager implements IDashboardManager, IManager {
         districtDataList.clear();
         districtDataList.addAll(successEvent.getDistrictData());
 
-        /**
-         * Find specific district data searched foor
-         */
-        findSpecificDistrictData(successEvent.getStateName(), successEvent.getStateCode());
+        //Find if spefic district data is Available or not
+        ArrayList<DistrictWise> districtWisesList = searchDistrictDataLocally(successEvent.getStateName(),
+                successEvent.getStateCode());
+
+        //send information back to caller
+        sendDistrictData(districtWisesList, false);
     }
 
-    private boolean checkIfDistrictDataAvailable(String stateName, String stateCode) {
-        boolean flag = false;
-        for (DistrictData districtData : districtDataList) {
-            if (stateName.trim().contains(districtData.getState().trim())) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
-
-    private void findSpecificDistrictData(String stateName, String stateCode) {
+    /**
+     * Check if the specific district data Available or not
+     *
+     * @param stateName
+     * @param stateCode
+     * @return
+     */
+    private ArrayList<DistrictWise> searchDistrictDataLocally(String stateName, String stateCode) {
         final ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
 
         for (DistrictData districtData : districtDataList) {
@@ -169,11 +211,21 @@ public class DashboardManager implements IDashboardManager, IManager {
                 break;
             }
         }
+        return districtWisesList;
+    }
 
+    /**
+     * Send back Data to View Model
+     *
+     * @param districtWisesList
+     */
+    private void sendDistrictData(final ArrayList<DistrictWise> districtWisesList, boolean isLocallyAvailable) {
+        Log.d(TAG, "*Rahul* sendDistrictData " + districtWisesList.size());
         /**
-         * Check if data requested is availble or not
+         * Check if data requested is available or not
          */
         if (districtWisesList.size() == 0) {
+            Log.d(TAG, "*Rahul* sendDistrictData 0");
             mEventBus.post(new IManagerNoDataAvailable() {
                 @Override
                 public void noDataAvailable() {
@@ -182,6 +234,7 @@ public class DashboardManager implements IDashboardManager, IManager {
             });
 
         } else {
+            Log.d(TAG, "*Rahul* sendDistrictData Data Available ");
             //data available
             mEventBus.post(new IManagerDistrictSuccess() {
                 @Override

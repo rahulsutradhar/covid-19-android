@@ -9,6 +9,25 @@
     android:visibility="gone"
     tools:visibility="gone">
 
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/no_data_message"
+        style="@style/AppTheme.Error.Textstyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_horizontal"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="start"
+        app:layout_constraintVertical_bias="0.4"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:text="@string/no_data_state_message"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button"
         style="@style/AppTheme.PrimaryButton"
@@ -20,38 +39,10 @@
         android:elevation="2dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        tools:text="go back" />
-
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/no_data_message"
-        style="@style/AppTheme.Error.Textstyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start|center_horizontal"
-        android:layout_marginLeft="35dp"
-        android:layout_marginRight="35dp"
-        android:layout_marginBottom="22dp"
-        android:gravity="start"
-        android:text="@string/no_data_state_message"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintGuide_percent="0.5"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/no_data_message"
+        tools:text="go back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

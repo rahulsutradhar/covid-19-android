@@ -12,6 +12,7 @@ import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
 import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
+import org.covid19.live.module.eventEngine.IEngineStatewiseNoDataAvailable;
 import org.covid19.live.rest.RestHelper;
 import org.covid19.live.rest.response.BannerResponse;
 import org.covid19.live.rest.response.DashboardResponse;
@@ -64,10 +65,10 @@ public class DashboardEngine implements IDashboardEngine {
                                 });
 
                             } else {
-                                mEventBus.post(new IEngineStatewiseDataFailure() {
+                                mEventBus.post(new IEngineStatewiseNoDataAvailable() {
                                     @Override
-                                    public void statewiseDateFailure() {
-
+                                    public Error getNoDataError() {
+                                        return null;
                                     }
                                 });
                             }

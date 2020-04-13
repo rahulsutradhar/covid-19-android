@@ -2,8 +2,9 @@
     <string name="app_name">Covid-19 live</string>
     <string name="dashboard_title">COVID-19 Dashboard</string>
     <string name="error_message">Something went wrong at our end!</string>
-    <string name="no_data_state_message">Sorry!! Requested data of state is not available.</string>
-    <string name="no_data_facts_message">Sorry!! Requested data is not available.</string>
+    <string name="no_data_state_message">Sorry! Requested data of state is not available.</string>
+    <string name="no_data_dashboard">Sorry! Requested data is not available.</string>
+    <string name="no_data_facts_message">Sorry! Requested data is not available.</string>
     <string name="retry_text">RETRY</string>
 
     <string name="no_data_button_text">Go Back</string>
@@ -56,5 +57,7 @@
     <!-- Video content-->
     <string name="dashboard_video_card_button">Show More Videos</string>
     <string name="covid_video_facts_activity_title">COVID-19 Videos</string>
+
+    <string name="main_data_source"><![CDATA[Note: Data Source <b>covid19india.org</b>, <b>Ministry of Health and Family Welfare</b> of Government of India and <b>World Health Organization</b>.]]></string>
 
 </resources>

@@ -35,7 +35,7 @@ public class MythBusterFactsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             viewHolder = new ItemMythBusterCardViewHolder(itemView);
 
         } else if (AppConstant.MYTH_BUSTER_SOURCE_CARD == viewType) {
-            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_card_myth_buster_facts_source,
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_card_data_source,
                     parent, false);
             viewHolder = new ItemSourcerCardViewHolder(itemView);
         }
