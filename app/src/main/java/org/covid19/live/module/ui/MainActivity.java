@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
     private View errorLayout;
     private TextView errorMessageView;
     private Button retryButton;
+
+    private View noDataLayout;
+    private TextView noDataMessageView;
+    private Button noDataButton;
+
     private SwipeRefreshLayout swipeRefreshLayout;
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -69,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
 
         viewModel.getStateListData().observe(this, stateListDataSuccess);
         viewModel.getStateListDataFailure().observe(this, stateListFailure);
+        viewModel.getStateListNoDataLiveData().observe(this, noStateDataAvailableObserver);
 
         //setuprecyclerview
         setupRecyclerView();
@@ -91,6 +97,10 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         errorMessageView = findViewById(R.id.error_message);
         retryButton = findViewById(R.id.retry_button);
 
+        noDataLayout = findViewById(R.id.no_data_layout);
+        noDataMessageView = findViewById(R.id.no_data_message);
+        noDataButton = findViewById(R.id.button);
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -109,6 +119,15 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
                 logFirebaseClickEvent("retry_button");
             }
         });
+
+        noDataButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchStatewiseLatestData();
+                logFirebaseClickEvent("no_data_button");
+
+            }
+        });
     }
 
     /**
@@ -117,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
     private void fetchStatewiseLatestData() {
         showLoader();
         hideErrorLayout();
+        hideNodataLayout();
         viewModel.fetchStatewiseLatestData();
     }
 
@@ -175,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         public void onChanged(ArrayList<StateWise> stateWises) {
             hideLoader();
             hideErrorLayout();
+            hideNodataLayout();
             logFirebaseDataLoad("statewise_data", true);
             stateWiseList.clear();
             stateWiseList.addAll(stateWises);
@@ -188,6 +209,17 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         public void onChanged(Error error) {
             hideLoader();
             showErrorLayout();
+            hideNodataLayout();
+            logFirebaseDataLoad("statewise_data", false);
+        }
+    };
+
+    private Observer<Error> noStateDataAvailableObserver = new Observer<Error>() {
+        @Override
+        public void onChanged(Error error) {
+            hideLoader();
+            hideErrorLayout();
+            showNodataLayout();
             logFirebaseDataLoad("statewise_data", false);
         }
     };
@@ -207,6 +239,17 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
     private void hideErrorLayout() {
         errorLayout.setVisibility(View.GONE);
     }
+
+    private void showNodataLayout() {
+        noDataLayout.setVisibility(View.VISIBLE);
+        noDataMessageView.setText(R.string.no_data_dashboard);
+        noDataButton.setText(R.string.retry_text);
+    }
+
+    private void hideNodataLayout() {
+        noDataLayout.setVisibility(View.GONE);
+    }
+
 
     private void logScreenVisit() {
         Bundle bundle = new Bundle();

@@ -18,6 +18,7 @@ import org.covid19.live.module.eventEngine.IEngineNoDataAvailable;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataFailure;
 import org.covid19.live.module.eventEngine.IEngineStatewiseDataSuccess;
 import org.covid19.live.module.eventEngine.IEngineBannerFactFailure;
+import org.covid19.live.module.eventEngine.IEngineStatewiseNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
 import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
 import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
@@ -26,6 +27,7 @@ import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
 import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
+import org.covid19.live.module.eventManager.IManagerStatewiseNoDataAvailable;
 import org.covid19.live.rest.response.DistrictData;
 import org.covid19.live.utilities.eventbus.EventbusImpl;
 import org.covid19.live.utilities.eventbus.IEventbus;
@@ -119,7 +121,17 @@ public class DashboardManager implements IDashboardManager, IManager {
 
             }
         });
+    }
 
+    @Subscribe
+    public void onEngineStatewiseNoDataAvailable(IEngineStatewiseNoDataAvailable failure) {
+        Log.d(TAG, "onEngineStatewiseNoDataAvailable");
+        mEventBus.post(new IManagerStatewiseNoDataAvailable() {
+            @Override
+            public Error getNoDataError() {
+                return null;
+            }
+        });
     }
 
 

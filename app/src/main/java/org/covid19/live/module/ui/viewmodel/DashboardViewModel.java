@@ -9,6 +9,7 @@ import org.covid19.live.common.viewmodel.BaseViewModel;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
 import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
+import org.covid19.live.module.eventManager.IManagerStatewiseNoDataAvailable;
 import org.covid19.live.utilities.eventbus.IEventbus;
 import org.covid19.live.utilities.threading.IBusinessExecutor;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,6 +22,7 @@ public class DashboardViewModel extends BaseViewModel {
 
     private MutableLiveData<ArrayList<StateWise>> stateListData = new MutableLiveData<>();
     private MutableLiveData<Error> stateListDataFailure = new MutableLiveData<>();
+    private MutableLiveData<Error> stateListNoDataLiveData = new MutableLiveData<>();
 
     public DashboardViewModel(IEventbus eventbus, IBusinessExecutor businessExecutor) {
         super(eventbus, businessExecutor);
@@ -48,11 +50,26 @@ public class DashboardViewModel extends BaseViewModel {
         stateListDataFailure.postValue(new Error());
     }
 
+    @Subscribe
+    public void onManagerStatewiseNoDataAvailable(IManagerStatewiseNoDataAvailable failure) {
+        Log.d(TAG, "onManagerStatewiseNoDataAvailable");
+        stateListNoDataLiveData.postValue(new Error());
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
     public MutableLiveData<ArrayList<StateWise>> getStateListData() {
         return stateListData;
     }
 
     public MutableLiveData getStateListDataFailure() {
         return stateListDataFailure;
+    }
+
+    public MutableLiveData<Error> getStateListNoDataLiveData() {
+        return stateListNoDataLiveData;
     }
 }
