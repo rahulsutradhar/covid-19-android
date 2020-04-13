@@ -93,7 +93,7 @@ public class DashboardManager implements IDashboardManager, IManager {
 
 
         ArrayList<StateWise> intermediateCardList = new ArrayList<>();
-        addIntermdiateDatacard(intermediateCardList);
+        addDashboardIntermdiateDatacard(intermediateCardList);
 
         /**
          * Add this list to origin list
@@ -114,7 +114,7 @@ public class DashboardManager implements IDashboardManager, IManager {
      *
      * @param intermediateCardList
      */
-    private void addIntermdiateDatacard(ArrayList<StateWise> intermediateCardList) {
+    private void addDashboardIntermdiateDatacard(ArrayList<StateWise> intermediateCardList) {
         // Add Myth Buster card
         StateWise mythBuster = new StateWise();
         mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
@@ -164,13 +164,20 @@ public class DashboardManager implements IDashboardManager, IManager {
     public void getDistrictData(String stateName, String stateCode) {
         Log.d(TAG, "getDistrictData");
 
-      /*  if (districtDataList.size() > 0 && checkIfDistrictDataAvailable(stateName, stateCode)) {
-            Log.d(TAG, "*Rahul* Local data Available ");
-            findSpecificDistrictData(stateName, stateCode);
+        /*if (districtDataList.size() > 0) {
+            Log.d(TAG, "*Rahul* getDistrictData() check locally ");
+
+            //Find if spefic district data is Available or not
+            ArrayList<DistrictWise> districtWisesList = searchDistrictDataLocally(stateName, stateCode);
+
+            //send information back to caller
+            sendDistrictData(districtWisesList,true);
+
         } else {
+            Log.d(TAG, "*Rahul* getDistrictData() Request Server ");
             mEngine.getDistrictData(stateName, stateCode);
-        }
-*/
+        }*/
+
         mEngine.getDistrictData(stateName, stateCode);
     }
 
@@ -180,24 +187,22 @@ public class DashboardManager implements IDashboardManager, IManager {
         districtDataList.clear();
         districtDataList.addAll(successEvent.getDistrictData());
 
-        /**
-         * Find specific district data searched foor
-         */
-        findSpecificDistrictData(successEvent.getStateName(), successEvent.getStateCode());
+        //Find if spefic district data is Available or not
+        ArrayList<DistrictWise> districtWisesList = searchDistrictDataLocally(successEvent.getStateName(),
+                successEvent.getStateCode());
+
+        //send information back to caller
+        sendDistrictData(districtWisesList, false);
     }
 
-    private boolean checkIfDistrictDataAvailable(String stateName, String stateCode) {
-        boolean flag = false;
-        for (DistrictData districtData : districtDataList) {
-            if (stateName.trim().contains(districtData.getState().trim())) {
-                flag = true;
-                break;
-            }
-        }
-        return flag;
-    }
-
-    private void findSpecificDistrictData(String stateName, String stateCode) {
+    /**
+     * Check if the specific district data Available or not
+     *
+     * @param stateName
+     * @param stateCode
+     * @return
+     */
+    private ArrayList<DistrictWise> searchDistrictDataLocally(String stateName, String stateCode) {
         final ArrayList<DistrictWise> districtWisesList = new ArrayList<>();
 
         for (DistrictData districtData : districtDataList) {
@@ -206,11 +211,21 @@ public class DashboardManager implements IDashboardManager, IManager {
                 break;
             }
         }
+        return districtWisesList;
+    }
 
+    /**
+     * Send back Data to View Model
+     *
+     * @param districtWisesList
+     */
+    private void sendDistrictData(final ArrayList<DistrictWise> districtWisesList, boolean isLocallyAvailable) {
+        Log.d(TAG, "*Rahul* sendDistrictData " + districtWisesList.size());
         /**
-         * Check if data requested is availble or not
+         * Check if data requested is available or not
          */
         if (districtWisesList.size() == 0) {
+            Log.d(TAG, "*Rahul* sendDistrictData 0");
             mEventBus.post(new IManagerNoDataAvailable() {
                 @Override
                 public void noDataAvailable() {
@@ -219,6 +234,7 @@ public class DashboardManager implements IDashboardManager, IManager {
             });
 
         } else {
+            Log.d(TAG, "*Rahul* sendDistrictData Data Available ");
             //data available
             mEventBus.post(new IManagerDistrictSuccess() {
                 @Override
