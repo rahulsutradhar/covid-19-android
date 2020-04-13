@@ -70,6 +70,10 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_card_dashboard_video,
                     parent, false);
             viewHolder = new ItemVideoCardViewHolder(itemView);
+        } else if (AppConstant.CARD_DATA_SOURCE == viewType) {
+            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_card_data_source,
+                    parent, false);
+            viewHolder = new ItemSourcerCardViewHolder(itemView);
         }
 
         return viewHolder;
@@ -411,6 +415,22 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 }
             });
         }
+    }
+
+    /**
+     * Source Card
+     */
+    class ItemSourcerCardViewHolder extends RecyclerView.ViewHolder {
+
+        private TextView description;
+
+        public ItemSourcerCardViewHolder(@NonNull View itemView) {
+            super(itemView);
+            description = itemView.findViewById(R.id.description);
+            description.setText(HtmlCompat.fromHtml(itemView.getContext().getString(R.string.main_data_source),
+                    HtmlCompat.FROM_HTML_MODE_COMPACT));
+        }
+
     }
 
 }

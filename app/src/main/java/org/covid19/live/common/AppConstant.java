@@ -6,13 +6,14 @@ package org.covid19.live.common;
  */
 public class AppConstant {
 
-    public static final int CARD_TOTAL = 1;
-    public static final int CARD_STATE_WISE = 2;
+    public static final int CARD_TOTAL = 100;
+    public static final int CARD_STATE_WISE = 200;
     public static final int CARD_DISTRICT_WISE = 0;
-    public static final int CARD_HEADER_STATE_UT = 4;
-    public static final int CARD_MYTH_BUSTER = 5;
-    public static final int CARD_BANNER_FACTS = 6;
-    public static final int CARD_COVID_VIDEO = 7;
+    public static final int CARD_HEADER_STATE_UT = 400;
+    public static final int CARD_MYTH_BUSTER = 500;
+    public static final int CARD_BANNER_FACTS = 600;
+    public static final int CARD_COVID_VIDEO = 700;
+    public static final int CARD_DATA_SOURCE = 800;
 
     /**
      * Myth Buster Card

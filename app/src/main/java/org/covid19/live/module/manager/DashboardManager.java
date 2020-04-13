@@ -104,6 +104,11 @@ public class DashboardManager implements IDashboardManager, IManager {
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
         successEvent.getStateWiseList().add(4, headerST);
 
+        //Add Data Source
+        StateWise dataSource = new StateWise();
+        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
+        successEvent.getStateWiseList().add(dataSource);
+
         mEventBus.post(new IManagerStatewiseDataSuccess() {
             @Override
             public ArrayList<StateWise> getStateWiseList() {
@@ -129,7 +134,7 @@ public class DashboardManager implements IDashboardManager, IManager {
         mEventBus.post(new IManagerStatewiseNoDataAvailable() {
             @Override
             public Error getNoDataError() {
-                return null;
+                return new Error();
             }
         });
     }

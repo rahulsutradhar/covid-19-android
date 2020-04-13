@@ -58,4 +58,6 @@
     <string name="dashboard_video_card_button">Show More Videos</string>
     <string name="covid_video_facts_activity_title">COVID-19 Videos</string>
 
+    <string name="main_data_source"><![CDATA[Note: Data Source <b>covid19india.org</b>, <b>Ministry of Health and Family Welfare</b> of Government of India and <b>World Health Organization</b>.]]></string>
+
 </resources>
