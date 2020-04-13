@@ -220,12 +220,11 @@ public class DashboardManager implements IDashboardManager, IManager {
      * @param districtWisesList
      */
     private void sendDistrictData(final ArrayList<DistrictWise> districtWisesList, boolean isLocallyAvailable) {
-        Log.d(TAG, "*Rahul* sendDistrictData " + districtWisesList.size());
+        Log.d(TAG, "sendDistrictData ");
         /**
          * Check if data requested is available or not
          */
         if (districtWisesList.size() == 0) {
-            Log.d(TAG, "*Rahul* sendDistrictData 0");
             mEventBus.post(new IManagerNoDataAvailable() {
                 @Override
                 public void noDataAvailable() {
@@ -234,7 +233,6 @@ public class DashboardManager implements IDashboardManager, IManager {
             });
 
         } else {
-            Log.d(TAG, "*Rahul* sendDistrictData Data Available ");
             //data available
             mEventBus.post(new IManagerDistrictSuccess() {
                 @Override
