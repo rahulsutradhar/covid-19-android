@@ -26,4 +26,18 @@ public class AppConstant {
     public static final int FACTS_MYTH_BUSTER = 101;
     public static final int FACTS_BANNER = 201;
     public static final int VIDEO_LIST_VIEW = 301;
+
+    /**
+     * Google Play Update priority
+     */
+    public static final int HIGH_PRIORITY_UPDATE = 5;
+
+    public static final int MODERATELY_HIGH_PRIORITY_UPDATE = 4;
+
+    /**
+     * app Update request Intent constant
+     */
+    public static final int APP_UPDATE_REQUEST_CODE_IMMEDIATE = 0xde1e7e;
+    public static final int APP_UPDATE_REQUEST_CODE_FLEXIBLE = 0xde2c9c;
+
 }

@@ -1,5 +1,6 @@
 package org.covid19.live.module.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -7,8 +8,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -18,13 +21,17 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.covid19.live.R;
 import org.covid19.live.common.AppConstant;
 import org.covid19.live.common.CommonUtiity;
+import org.covid19.live.common.UpdateManager;
 import org.covid19.live.common.data.CovidVideoInfo;
 import org.covid19.live.module.entity.StateWise;
 import org.covid19.live.module.ui.adapter.DashboardAdapter;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModel;
 import org.covid19.live.module.ui.viewmodel.DashboardViewModelFactory;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import static org.covid19.live.common.AppConstant.APP_UPDATE_REQUEST_CODE_IMMEDIATE;
 
 public class MainActivity extends AppCompatActivity implements DashboardAdapter.Listener {
 
@@ -70,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         fetchStatewiseLatestData();
 
         logScreenVisit();
+
+        //check app Update option
+        WeakReference<Context> activityContext = new WeakReference<Context>(this);
+        UpdateManager.checkforAppUpdate(activityContext);
     }
 
     private void setupViewsReference() {
@@ -219,4 +230,18 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        /**
+         * App Update callback
+         */
+        if (requestCode == APP_UPDATE_REQUEST_CODE_IMMEDIATE) {
+            if (resultCode != RESULT_OK) {
+                Log.e(TAG, "Update flow failed! Result code: " + resultCode);
+                // If the update is cancelled or fails,
+                // you can request to start the update again.
+            }
+        }
+    }
 }
