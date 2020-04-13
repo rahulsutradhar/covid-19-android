@@ -9,17 +9,19 @@
 
     <string name="no_data_button_text">Go Back</string>
 
-    <string name="total_card_title">COVID-19 India</string>
+    <string name="total_card_title">India Statistics</string>
     <string name="total_card_subtitle">A crowdsourced initiative</string>
 
     <string name="last_updated_at">Last updated</string>
+    <string name="app_update_info">A new version is available please update your app.</string>
+    <string name="app_update_button_text">Update</string>
 
     <string name="confirm_title">CONFIRMED</string>
     <string name="active_title">ACTIVE</string>
     <string name="recovered_title">RECOVERED</string>
     <string name="deceased_title">DECEASED</string>
 
-    <string name="state_ut_header_title">State/UT Report</string>
+    <string name="state_ut_header_title">State/UT Statistics</string>
     <string name="state_ut_subheader_title">COMPILED FROM STATE GOVT. NUMBERS KNOW MORE</string>
     <string name="splash_title">COVID-19 LIVE\nIndia</string>
 

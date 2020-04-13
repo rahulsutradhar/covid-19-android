@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.covid19.live.R;
@@ -54,7 +55,12 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private ArrayList<StateWise> stateWiseList = new ArrayList<>();
+    private WeakReference<Context> activityContext;
     private DashboardAdapter adapter;
+    private View appUpdateLayout;
+    private Button appUpdateButton;
+
+    private AppUpdateInfo appUpdateInfoIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,8 +91,8 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         logScreenVisit();
 
         //check app Update option
-        WeakReference<Context> activityContext = new WeakReference<Context>(this);
-        UpdateManager.checkforAppUpdate(activityContext);
+        activityContext = new WeakReference<Context>(this);
+        UpdateManager.checkforAppUpdate(activityContext, appUpdateLister);
     }
 
     private void setupViewsReference() {
@@ -100,6 +106,10 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         noDataLayout = findViewById(R.id.no_data_layout);
         noDataMessageView = findViewById(R.id.no_data_message);
         noDataButton = findViewById(R.id.button);
+
+        appUpdateLayout = findViewById(R.id.app_update_card_layout);
+        appUpdateButton = findViewById(R.id.update_button);
+        appUpdateLayout.setVisibility(View.GONE);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -126,6 +136,19 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
                 fetchStatewiseLatestData();
                 logFirebaseClickEvent("no_data_button");
 
+            }
+        });
+
+        appUpdateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /**
+                 * If AppUpdateInfo return by play check is not null then immediately update app.
+                 */
+                if (appUpdateInfoIntent != null) {
+                    UpdateManager.requestImmediateAppUpdate(activityContext, appUpdateInfoIntent);
+                }
             }
         });
     }
@@ -250,6 +273,13 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         noDataLayout.setVisibility(View.GONE);
     }
 
+    private void showAppUpdateLayout() {
+        appUpdateLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void hideAppUpdateLayout() {
+        appUpdateLayout.setVisibility(View.GONE);
+    }
 
     private void logScreenVisit() {
         Bundle bundle = new Bundle();
@@ -272,6 +302,18 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         bundle.putString("on_click_item", clickItem);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
     }
+
+    private UpdateManager.AppUpdateLister appUpdateLister = new UpdateManager.AppUpdateLister() {
+        @Override
+        public void isAppUpdateAvailable(boolean isAvailable, AppUpdateInfo appUpdateInfo) {
+            if (isAvailable) {
+                appUpdateInfoIntent = appUpdateInfo;
+                showAppUpdateLayout();
+            } else {
+                hideAppUpdateLayout();
+            }
+        }
+    };
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

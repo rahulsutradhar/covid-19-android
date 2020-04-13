@@ -17,7 +17,6 @@ import com.google.android.play.core.tasks.Task;
 import java.lang.ref.WeakReference;
 
 import static org.covid19.live.common.AppConstant.APP_UPDATE_REQUEST_CODE_IMMEDIATE;
-import static org.covid19.live.common.AppConstant.HIGH_PRIORITY_UPDATE;
 import static org.covid19.live.common.AppConstant.MODERATELY_HIGH_PRIORITY_UPDATE;
 
 public class UpdateManager {
@@ -27,7 +26,7 @@ public class UpdateManager {
     /**
      * Check for App Udate
      */
-    public static void checkforAppUpdate(final WeakReference<Context> activityContext) {
+    public static void checkforAppUpdate(final WeakReference<Context> activityContext, final AppUpdateLister updateLister) {
         // Creates instance of the manager.
         final AppUpdateManager appUpdateManager = AppUpdateManagerFactory.create(activityContext.get());
 
@@ -46,16 +45,20 @@ public class UpdateManager {
                  */
                 if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
 
-                    if (appUpdateInfo.updatePriority() >= MODERATELY_HIGH_PRIORITY_UPDATE
+                   /* if (appUpdateInfo.updatePriority() >= MODERATELY_HIGH_PRIORITY_UPDATE
                             && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
 
-                        // Request an immediate update.
-                        requestImmediateAppUpdate(activityContext, appUpdateInfo);
+                        //TODO inform user about app update available
+                        updateLister.isAppUpdateAvailable(true);
 
                     } else {
                         //TODO: request flexible update
 
-                    }
+                    }*/
+
+                    updateLister.isAppUpdateAvailable(true, appUpdateInfo);
+                } else {
+                    updateLister.isAppUpdateAvailable(false, null);
                 }
 
             }
@@ -86,5 +89,9 @@ public class UpdateManager {
         } catch (IntentSender.SendIntentException e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    public interface AppUpdateLister {
+        void isAppUpdateAvailable(boolean isAvailable, AppUpdateInfo appUpdateInfo);
     }
 }

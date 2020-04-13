@@ -23,6 +23,15 @@
                 android:background="@android:color/transparent"
                 android:clipToPadding="false"
                 android:paddingBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/app_update_card_layout" />
+
+            <!-- App update card -->
+            <include
+                android:id="@+id/app_update_card_layout"
+                layout="@layout/layout_card_app_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
