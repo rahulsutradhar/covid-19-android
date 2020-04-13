@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Covid-19 live</string>
+    <string name="app_name">Covid19 Live</string>
     <string name="dashboard_title">COVID-19 Dashboard</string>
     <string name="error_message">Something went wrong at our end!</string>
     <string name="no_data_state_message">Sorry! Requested data of State is not available.</string>
@@ -23,7 +23,7 @@
 
     <string name="state_ut_header_title">State/UT Statistics</string>
     <string name="state_ut_subheader_title">COMPILED FROM STATE GOVT. NUMBERS KNOW MORE</string>
-    <string name="splash_title">COVID-19 LIVE\nIndia</string>
+    <string name="splash_title">COVID-19 LIVE</string>
 
     <!--Mystery buster -->
     <string name="myth_buster_card_title">Myth Busters! There is a lot of false information around. These are the facts.</string>
