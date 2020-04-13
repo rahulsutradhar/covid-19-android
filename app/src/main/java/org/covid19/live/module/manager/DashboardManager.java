@@ -72,10 +72,13 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Subscribe
-    public void onEngineStatewiseDataSuccess(final IEngineStatewiseDataSuccess successEvent) {
+    public void onEngineStatewiseDataSuccess(IEngineStatewiseDataSuccess successEvent) {
         Log.d(TAG, "onEngineStatewiseDataSuccess");
+
+        final ArrayList<StateWise> dashboardCardList = successEvent.getStateWiseList();
+
         //modify data
-        for (StateWise stateWise : successEvent.getStateWiseList()) {
+        for (StateWise stateWise : dashboardCardList) {
             if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
                 stateWise.setViewType(AppConstant.CARD_TOTAL);
             } else {
@@ -83,38 +86,55 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
+        //Add Data Source Card at end
+        StateWise dataSource = new StateWise();
+        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
+        dashboardCardList.add(dataSource);
+
+
+        ArrayList<StateWise> intermediateCardList = new ArrayList<>();
+        addIntermdiateDatacard(intermediateCardList);
+
+        /**
+         * Add this list to origin list
+         */
+        dashboardCardList.addAll(1, intermediateCardList);
+
+
+        mEventBus.post(new IManagerStatewiseDataSuccess() {
+            @Override
+            public ArrayList<StateWise> getStateWiseList() {
+                return dashboardCardList;
+            }
+        });
+    }
+
+    /**
+     * this Add Intermediate card
+     *
+     * @param intermediateCardList
+     */
+    private void addIntermdiateDatacard(ArrayList<StateWise> intermediateCardList) {
         // Add Myth Buster card
         StateWise mythBuster = new StateWise();
         mythBuster.setViewType(AppConstant.CARD_MYTH_BUSTER);
-        successEvent.getStateWiseList().add(1, mythBuster);
+        intermediateCardList.add(mythBuster);
 
         //add covid video
         StateWise videoCard = new StateWise();
         videoCard.setViewType(AppConstant.CARD_COVID_VIDEO);
         videoCard.setCovidVideoInfo(CovidVideoInfo.getDashboardCardViedeo());
-        successEvent.getStateWiseList().add(2, videoCard);
+        intermediateCardList.add(videoCard);
 
         //Add Banner Facts
         StateWise bannerFacts = new StateWise();
         bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
-        successEvent.getStateWiseList().add(3, bannerFacts);
+        intermediateCardList.add(bannerFacts);
 
         //Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        successEvent.getStateWiseList().add(4, headerST);
-
-        //Add Data Source
-        StateWise dataSource = new StateWise();
-        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
-        successEvent.getStateWiseList().add(dataSource);
-
-        mEventBus.post(new IManagerStatewiseDataSuccess() {
-            @Override
-            public ArrayList<StateWise> getStateWiseList() {
-                return successEvent.getStateWiseList();
-            }
-        });
+        intermediateCardList.add(headerST);
     }
 
     @Subscribe
