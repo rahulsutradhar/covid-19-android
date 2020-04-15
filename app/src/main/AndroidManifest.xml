@@ -9,7 +9,9 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_coronavirus"
         android:theme="@style/AppTheme">
+
         <activity android:name=".module.ui.FactsActivity"></activity>
+
         <activity
             android:name=".module.ui.SplashActivity"
             android:screenOrientation="portrait"
@@ -20,14 +22,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".module.ui.DistrictActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".module.ui.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"></activity>
+
+        <meta-data android:name="firebase_crashlytics_collection_enabled"
+            android:value="${enableCrashReporting}" />
+        <meta-data
+            android:name="firebase_analytics_collection_deactivated"
+            android:value="${deactivateFirebaseAnalytics}"/>
+
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

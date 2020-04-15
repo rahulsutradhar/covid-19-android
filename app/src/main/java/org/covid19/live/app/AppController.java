@@ -8,6 +8,7 @@ import com.microsoft.appcenter.AppCenter;
 import com.microsoft.appcenter.analytics.Analytics;
 import com.microsoft.appcenter.crashes.Crashes;
 
+import org.covid19.live.BuildConfig;
 import org.covid19.live.lifecycle.ManagerLifeCycleController;
 import org.covid19.live.utilities.threading.BusinessExecutor;
 import org.covid19.live.utilities.threading.IBusinessExecutor;
@@ -28,8 +29,10 @@ public class AppController extends Application {
         sContext = this;
         super.onCreate();
 
-        AppCenter.start(this, "e131676f-2aba-404c-8014-79dcda6cbef3",
-                Analytics.class, Crashes.class);
+        if (!BuildConfig.DEBUG) {
+            AppCenter.start(this, "e131676f-2aba-404c-8014-79dcda6cbef3",
+                    Analytics.class, Crashes.class);
+        }
 
         MainExecutor.getInstance().setMainThreadHandler(new Handler());
         managerLifeCycleController = new ManagerLifeCycleController();
