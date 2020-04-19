@@ -5,7 +5,7 @@ public interface IDashboardManager {
 
     void getDashboardData();
 
-    void getStateWiseData();
+    void getStateWiseData(boolean fetchLocally);
 
     void getDistrictData(String stateName,String stateCode);
 

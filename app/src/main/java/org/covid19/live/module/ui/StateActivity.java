@@ -64,7 +64,7 @@ public class StateActivity extends AppCompatActivity implements StatewiseAdapter
         //setuprecyclerview
         setupRecyclerView();
 
-        fetchStateData();
+        fetchStateData(false);
     }
 
     @Override
@@ -88,7 +88,7 @@ public class StateActivity extends AppCompatActivity implements StatewiseAdapter
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                fetchStateData();
+                fetchStateData(false);
 
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
@@ -99,14 +99,14 @@ public class StateActivity extends AppCompatActivity implements StatewiseAdapter
         retryButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fetchStateData();
+                fetchStateData(false);
             }
         });
 
         noDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fetchStateData();
+                fetchStateData(false);
             }
         });
     }
@@ -119,11 +119,11 @@ public class StateActivity extends AppCompatActivity implements StatewiseAdapter
         recyclerView.setLayoutManager(managerReview);
     }
 
-    private void fetchStateData() {
+    private void fetchStateData(boolean fetchLocally) {
         showLoader();
         hideErrorLayout();
         hideNodataLayout();
-        viewModel.fetchStatewiseLatestData();
+        viewModel.fetchStatewiseLatestData(fetchLocally);
     }
 
 

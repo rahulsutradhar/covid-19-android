@@ -28,17 +28,17 @@ public class StateViewModel extends BaseViewModel {
         super(eventbus, businessExecutor);
     }
 
-    public void fetchStatewiseLatestData() {
-        Log.d(TAG, "fetchDashboardData");
+    public void fetchStatewiseLatestData(final boolean fetchLocally) {
+        Log.d(TAG, "fetchStatewiseLatestData");
         businessExecutor.executeInBusinessThread(new Runnable() {
             @Override
             public void run() {
-                ManagerFactory.getDashboardDataManager().getStateWiseData();
+                ManagerFactory.getDashboardDataManager().getStateWiseData(fetchLocally);
             }
         });
     }
 
-    @Subscribe
+    @Subscribe()
     public void onManagerStatewiseDataSuccess(final IManagerStateDataSuccess successEvent) {
         Log.d(TAG, "onManagerStatewiseDataSuccess");
         stateListData.postValue(successEvent.getStateWiseList());

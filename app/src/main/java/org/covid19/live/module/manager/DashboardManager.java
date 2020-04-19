@@ -82,7 +82,7 @@ public class DashboardManager implements IDashboardManager, IManager {
 
         if (isOnlyStateData) {
             isOnlyStateData = false;
-            onStateDataSuccess(successEvent.getStateWiseList());
+            onStateDataSuccess(successEvent.getStateWiseList(), false);
             return;
         }
 
@@ -340,50 +340,38 @@ public class DashboardManager implements IDashboardManager, IManager {
 
 
     @Override
-    public void getStateWiseData() {
-        //data available
-        /*if (indiaStatewiseDataList.size() > 0) {
-            mEventBus.post(new IManagerDashboardDataSuccess() {
-                @Override
-                public ArrayList<StateWise> getStateWiseList() {
-                    return indiaStatewiseDataList;
-                }
-            });
-
+    public void getStateWiseData(boolean fetchLocally) {
+        Log.d(TAG, "getStateWiseData");
+        if (fetchLocally) {
+            onStateDataSuccess(indiaStatewiseDataList, true);
         } else {
             isOnlyStateData = true;
-            mBusinessExecutor.executeInBusinessThread(new Runnable() {
-                @Override
-                public void run() {
-                    mEngine.getDashboardData();
-                }
-            });
-        }*/
-
-        isOnlyStateData = true;
-        mBusinessExecutor.executeInBusinessThread(new Runnable() {
-            @Override
-            public void run() {
-                mEngine.getDashboardData();
-            }
-        });
-    }
-
-    private void onStateDataSuccess(final ArrayList<StateWise> stateWises) {
-        //Add State/ Ut Header
-        StateWise headerST = new StateWise();
-        headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-
-        //modify data
-        for (StateWise stateWise : stateWises) {
-            if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
-                //skip
-            } else {
-                stateWise.setViewType(AppConstant.CARD_STATE_WISE);
-            }
+            mEngine.getDashboardData();
         }
 
-        stateWises.set(0, headerST);
+    }
+
+    private void onStateDataSuccess(final ArrayList<StateWise> stateWises, boolean isLocally) {
+        Log.d(TAG, "onStateDataSuccess");
+
+        if (!isLocally) {
+            //Add State/ Ut Header
+            StateWise headerST = new StateWise();
+            headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
+
+            //modify data
+            for (StateWise stateWise : stateWises) {
+                if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
+                    //skip
+                } else {
+                    stateWise.setViewType(AppConstant.CARD_STATE_WISE);
+                }
+            }
+
+            stateWises.set(0, headerST);
+        } else {
+            Log.d(TAG, "*Rahul* onStateDataSuccess Locally - " + stateWises.size());
+        }
 
         mEventBus.post(new IManagerStateDataSuccess() {
             @Override
