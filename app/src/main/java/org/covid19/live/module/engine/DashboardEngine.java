@@ -42,8 +42,8 @@ public class DashboardEngine implements IDashboardEngine {
     }
 
     @Override
-    public void getStatewiseData() {
-        Log.d(TAG, "getStatewiseData");
+    public void getDashboardData() {
+        Log.d(TAG, "getDashboardData");
 
         RestHelper.getAPIService()
                 .fetchStatewiseData()

@@ -4,6 +4,6 @@ import org.covid19.live.module.entity.StateWise;
 
 import java.util.ArrayList;
 
-public interface IManagerStatewiseDataSuccess {
+public interface IManagerStateDataSuccess {
     ArrayList<StateWise> getStateWiseList();
 }

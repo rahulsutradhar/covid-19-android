@@ -3,7 +3,9 @@ package org.covid19.live.module.manager;
 
 public interface IDashboardManager {
 
-    void getStatewiseData();
+    void getDashboardData();
+
+    void getStateWiseData();
 
     void getDistrictData(String stateName,String stateCode);
 

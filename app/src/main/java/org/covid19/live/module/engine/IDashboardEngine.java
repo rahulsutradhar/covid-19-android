@@ -4,7 +4,7 @@ public interface IDashboardEngine {
 
     void onStart();
 
-    void getStatewiseData();
+    void getDashboardData();
 
     void getDistrictData(String stateName, String stateCode);
 

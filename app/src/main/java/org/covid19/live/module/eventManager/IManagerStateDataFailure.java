@@ -1,6 +1,5 @@
 package org.covid19.live.module.eventManager;
 
-public interface IManagerStatewiseDataFailure {
-
+public interface IManagerStateDataFailure {
     void statewiseDateFailure();
 }

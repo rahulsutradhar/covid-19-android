@@ -86,6 +86,12 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             ItemTotalCardViewHolder viewHolder = (ItemTotalCardViewHolder) holder;
             viewHolder.setTotalData(stateWisesList.get(position));
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onIndiaCardClicked();
+                }
+            });
 
         } else if (AppConstant.CARD_STATE_WISE == getItemViewType(position)) {
 
@@ -122,6 +128,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
      * Communicating interface
      */
     public interface Listener {
+        void onIndiaCardClicked();
+
         void onStateCardClick(StateWise stateWise);
 
         void onMythBusterFactButtonClicked();

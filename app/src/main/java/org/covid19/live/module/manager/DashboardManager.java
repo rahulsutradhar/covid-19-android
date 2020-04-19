@@ -22,12 +22,15 @@ import org.covid19.live.module.eventEngine.IEngineStatewiseNoDataAvailable;
 import org.covid19.live.module.eventManager.IManagerBannerFactFailure;
 import org.covid19.live.module.eventManager.IManagerBannerFactsNoData;
 import org.covid19.live.module.eventManager.IManagerBannerFactsSuccess;
+import org.covid19.live.module.eventManager.IManagerDashboardDataSuccess;
 import org.covid19.live.module.eventManager.IManagerDistrictFailure;
 import org.covid19.live.module.eventManager.IManagerDistrictSuccess;
 import org.covid19.live.module.eventManager.IManagerNoDataAvailable;
-import org.covid19.live.module.eventManager.IManagerStatewiseDataFailure;
-import org.covid19.live.module.eventManager.IManagerStatewiseDataSuccess;
-import org.covid19.live.module.eventManager.IManagerStatewiseNoDataAvailable;
+import org.covid19.live.module.eventManager.IManagerDashboardDataFailure;
+import org.covid19.live.module.eventManager.IManagerDashboardNoDataAvailable;
+import org.covid19.live.module.eventManager.IManagerStateDataFailure;
+import org.covid19.live.module.eventManager.IManagerStateDataSuccess;
+import org.covid19.live.module.eventManager.IManagerStateNoDataAvailable;
 import org.covid19.live.rest.response.DistrictData;
 import org.covid19.live.utilities.eventbus.EventbusImpl;
 import org.covid19.live.utilities.eventbus.IEventbus;
@@ -45,6 +48,8 @@ public class DashboardManager implements IDashboardManager, IManager {
     private IBusinessExecutor mBusinessExecutor;
     private IDashboardEngine mEngine = new DashboardEngine();
     private volatile ArrayList<DistrictData> districtDataList = new ArrayList<>();
+    private volatile ArrayList<StateWise> indiaStatewiseDataList = new ArrayList<>();
+    private boolean isOnlyStateData;
 
     public static DashboardManager getInstance() {
         return sInstance;
@@ -66,16 +71,28 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Override
-    public void getStatewiseData() {
-        Log.d(TAG, "getStatewiseData");
-        mEngine.getStatewiseData();
+    public void getDashboardData() {
+        Log.d(TAG, "getDashboardData");
+        mEngine.getDashboardData();
     }
 
     @Subscribe
-    public void onEngineStatewiseDataSuccess(IEngineStatewiseDataSuccess successEvent) {
+    public void onEngineDashboardDataSuccess(IEngineStatewiseDataSuccess successEvent) {
         Log.d(TAG, "onEngineStatewiseDataSuccess");
 
+        if (isOnlyStateData) {
+            isOnlyStateData = false;
+            onStateDataSuccess(successEvent.getStateWiseList());
+            return;
+        }
+
         final ArrayList<StateWise> dashboardCardList = successEvent.getStateWiseList();
+
+        indiaStatewiseDataList.clear();
+        //Add State/ Ut Header
+        StateWise headerST = new StateWise();
+        headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
+        indiaStatewiseDataList.add(headerST);
 
         //modify data
         for (StateWise stateWise : dashboardCardList) {
@@ -83,6 +100,7 @@ public class DashboardManager implements IDashboardManager, IManager {
                 stateWise.setViewType(AppConstant.CARD_TOTAL);
             } else {
                 stateWise.setViewType(AppConstant.CARD_STATE_WISE);
+                indiaStatewiseDataList.add(stateWise);
             }
         }
 
@@ -101,7 +119,7 @@ public class DashboardManager implements IDashboardManager, IManager {
         dashboardCardList.addAll(1, intermediateCardList);
 
 
-        mEventBus.post(new IManagerStatewiseDataSuccess() {
+        mEventBus.post(new IManagerDashboardDataSuccess() {
             @Override
             public ArrayList<StateWise> getStateWiseList() {
                 return dashboardCardList;
@@ -138,9 +156,16 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Subscribe
-    public void onEngineStatewiseDataFailure(IEngineStatewiseDataFailure failureEvent) {
+    public void onEngineDasboardDataFailure(IEngineStatewiseDataFailure failureEvent) {
         Log.d(TAG, "onEngineStatewiseDataFailure");
-        mEventBus.post(new IManagerStatewiseDataFailure() {
+
+        if (isOnlyStateData) {
+            isOnlyStateData = false;
+            onStateDataFailure();
+            return;
+        }
+
+        mEventBus.post(new IManagerDashboardDataFailure() {
             @Override
             public void statewiseDateFailure() {
 
@@ -149,9 +174,14 @@ public class DashboardManager implements IDashboardManager, IManager {
     }
 
     @Subscribe
-    public void onEngineStatewiseNoDataAvailable(IEngineStatewiseNoDataAvailable failure) {
+    public void onEngineDasboardNoDataAvailable(IEngineStatewiseNoDataAvailable failure) {
         Log.d(TAG, "onEngineStatewiseNoDataAvailable");
-        mEventBus.post(new IManagerStatewiseNoDataAvailable() {
+        if (isOnlyStateData) {
+            isOnlyStateData = false;
+            onStateDataNoData();
+            return;
+        }
+        mEventBus.post(new IManagerDashboardNoDataAvailable() {
             @Override
             public Error getNoDataError() {
                 return new Error();
@@ -307,4 +337,79 @@ public class DashboardManager implements IDashboardManager, IManager {
         });
     }
 
+
+    @Override
+    public void getStateWiseData() {
+        //data available
+        /*if (indiaStatewiseDataList.size() > 0) {
+            mEventBus.post(new IManagerDashboardDataSuccess() {
+                @Override
+                public ArrayList<StateWise> getStateWiseList() {
+                    return indiaStatewiseDataList;
+                }
+            });
+
+        } else {
+            isOnlyStateData = true;
+            mBusinessExecutor.executeInBusinessThread(new Runnable() {
+                @Override
+                public void run() {
+                    mEngine.getDashboardData();
+                }
+            });
+        }*/
+
+        isOnlyStateData = true;
+        mBusinessExecutor.executeInBusinessThread(new Runnable() {
+            @Override
+            public void run() {
+                mEngine.getDashboardData();
+            }
+        });
+    }
+
+    private void onStateDataSuccess(final ArrayList<StateWise> stateWises) {
+        //Add State/ Ut Header
+        StateWise headerST = new StateWise();
+        headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
+
+        //modify data
+        for (StateWise stateWise : stateWises) {
+            if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
+                //skip
+            } else {
+                stateWise.setViewType(AppConstant.CARD_STATE_WISE);
+            }
+        }
+
+        stateWises.set(0,headerST);
+
+        mEventBus.post(new IManagerStateDataSuccess() {
+            @Override
+            public ArrayList<StateWise> getStateWiseList() {
+                return stateWises;
+            }
+        });
+
+    }
+
+    private void onStateDataFailure() {
+
+        mEventBus.post(new IManagerStateDataFailure() {
+            @Override
+            public void statewiseDateFailure() {
+
+            }
+        });
+    }
+
+    private void onStateDataNoData() {
+
+        mEventBus.post(new IManagerStateNoDataAvailable() {
+            @Override
+            public Error getNoDataError() {
+                return null;
+            }
+        });
+    }
 }

@@ -34,9 +34,9 @@ import java.util.ArrayList;
 
 import static org.covid19.live.common.AppConstant.APP_UPDATE_REQUEST_CODE_IMMEDIATE;
 
-public class MainActivity extends AppCompatActivity implements DashboardAdapter.Listener {
+public class DashboardActivity extends AppCompatActivity implements DashboardAdapter.Listener {
 
-    public static final String TAG = "MainActivity";
+    public static final String TAG = "DashboardActivity";
 
     private DashboardViewModel viewModel;
 
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_dashboard);
 
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         showLoader();
         hideErrorLayout();
         hideNodataLayout();
-        viewModel.fetchStatewiseLatestData();
+        viewModel.fetchDashboardData();
     }
 
     private void setupRecyclerView() {
@@ -168,6 +168,12 @@ public class MainActivity extends AppCompatActivity implements DashboardAdapter.
         LinearLayoutManager managerReview = new LinearLayoutManager(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(managerReview);
+    }
+
+    @Override
+    public void onIndiaCardClicked() {
+        Intent intent = new Intent(this, StateActivity.class);
+        startActivity(intent);
     }
 
     @Override
