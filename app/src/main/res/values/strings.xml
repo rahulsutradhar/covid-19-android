@@ -11,6 +11,8 @@
 
     <string name="total_card_title">India Statistics</string>
     <string name="total_card_subtitle">A crowdsourced initiative</string>
+    <string name="total_card_button_text">Statewise Statistics</string>
+    <string name="statewise_activity_title">India Statistics</string>
 
     <string name="last_updated_at">Last updated</string>
     <string name="app_update_info">A new version is available please update your app.</string>

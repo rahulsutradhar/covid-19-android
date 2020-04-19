@@ -49,7 +49,7 @@ public class StateActivity extends AppCompatActivity implements StatewiseAdapter
         setupViewsReference();
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("India Statistics");
+        setTitle(R.string.statewise_activity_title);
 
         //Standard lines for architecture components
         DashboardViewModelFactory factory = DashboardViewModelFactory.getInstance();

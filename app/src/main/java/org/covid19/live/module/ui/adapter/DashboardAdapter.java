@@ -86,12 +86,6 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             ItemTotalCardViewHolder viewHolder = (ItemTotalCardViewHolder) holder;
             viewHolder.setTotalData(stateWisesList.get(position));
-            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onIndiaCardClicked();
-                }
-            });
 
         } else if (AppConstant.CARD_STATE_WISE == getItemViewType(position)) {
 
@@ -151,6 +145,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         private TextView activeCountText, activeCountDeltaText;
         private TextView recoveredCountText, recoveredCountDeltaText;
         private TextView deceasedCountText, deceasedCountDeltaText;
+        private Button button;
 
         public ItemTotalCardViewHolder(View itemView) {
             super(itemView);
@@ -166,6 +161,14 @@ public class DashboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
             deceasedCountText = itemView.findViewById(R.id.deceased_count);
             deceasedCountDeltaText = itemView.findViewById(R.id.deceased_count_delta);
+
+            button = itemView.findViewById(R.id.button);
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onIndiaCardClicked();
+                }
+            });
         }
 
         public void setTotalData(StateWise stateWise) {

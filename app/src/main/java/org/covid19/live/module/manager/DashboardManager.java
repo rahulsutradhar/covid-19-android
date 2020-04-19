@@ -86,7 +86,7 @@ public class DashboardManager implements IDashboardManager, IManager {
             return;
         }
 
-        final ArrayList<StateWise> dashboardCardList = successEvent.getStateWiseList();
+        final ArrayList<StateWise> dashboardCardList = new ArrayList<>();
 
         indiaStatewiseDataList.clear();
         //Add State/ Ut Header
@@ -95,20 +95,15 @@ public class DashboardManager implements IDashboardManager, IManager {
         indiaStatewiseDataList.add(headerST);
 
         //modify data
-        for (StateWise stateWise : dashboardCardList) {
+        for (StateWise stateWise : successEvent.getStateWiseList()) {
             if ("TT".equalsIgnoreCase(stateWise.getStateCode()) || "Total".equalsIgnoreCase(stateWise.getState())) {
                 stateWise.setViewType(AppConstant.CARD_TOTAL);
+                dashboardCardList.add(stateWise);
             } else {
                 stateWise.setViewType(AppConstant.CARD_STATE_WISE);
                 indiaStatewiseDataList.add(stateWise);
             }
         }
-
-        //Add Data Source Card at end
-        StateWise dataSource = new StateWise();
-        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
-        dashboardCardList.add(dataSource);
-
 
         ArrayList<StateWise> intermediateCardList = new ArrayList<>();
         addDashboardIntermdiateDatacard(intermediateCardList);
@@ -116,7 +111,13 @@ public class DashboardManager implements IDashboardManager, IManager {
         /**
          * Add this list to origin list
          */
-        dashboardCardList.addAll(1, intermediateCardList);
+        dashboardCardList.addAll(intermediateCardList);
+
+
+        //Add Data Source Card at end
+        StateWise dataSource = new StateWise();
+        dataSource.setViewType(AppConstant.CARD_DATA_SOURCE);
+        dashboardCardList.add(dataSource);
 
 
         mEventBus.post(new IManagerDashboardDataSuccess() {
@@ -149,10 +150,10 @@ public class DashboardManager implements IDashboardManager, IManager {
         bannerFacts.setViewType(AppConstant.CARD_BANNER_FACTS);
         intermediateCardList.add(bannerFacts);
 
-        //Add State/ Ut Header
+        /*//Add State/ Ut Header
         StateWise headerST = new StateWise();
         headerST.setViewType(AppConstant.CARD_HEADER_STATE_UT);
-        intermediateCardList.add(headerST);
+        intermediateCardList.add(headerST);*/
     }
 
     @Subscribe
@@ -382,7 +383,7 @@ public class DashboardManager implements IDashboardManager, IManager {
             }
         }
 
-        stateWises.set(0,headerST);
+        stateWises.set(0, headerST);
 
         mEventBus.post(new IManagerStateDataSuccess() {
             @Override
